@@ -4,7 +4,7 @@ description: "STATISTICS, ALGORITHMS, DATA STRUCTURE, DATA ENGINEERING, MACHINE 
 more: "read more »"
 url: "https://lovesignal.github.io/"
 baseurl: ""
-paginate: 3
+paginate: 5
 permalink: pretty
 excerpt_separator: "\n\n\n" # two blank lines
 
@@ -18,13 +18,13 @@ navigation:
   - about.md
 
 comments:
-  disqus: "lovesignal"
+  disqus: "Signal"
 #  isso: "comments.mysite.org"
 
-links: # see http://fontawesome.io/icons/#brand for all possible icons
-  - twitter: "https://twitter.com/twitter/"
+links: 
+  # - twitter: "https://twitter.com/"
   - github: "https://github.com/lovesignal"
-  - envelope: "mailto:hmtb.signal@gmail.com"
+  - envelope: "mailto: hmtb.signal@gmail.com"
 
 defaults: [{scope: {path: ""}, values: {layout: "default"}}, {scope: {path: "", type: "posts"}, values: {comments: true}}]
 sass: {style: expanded}
