@@ -1,0 +1,57 @@
+<h2 id="programming-hdfs-architecture">[Programming] HDFS Architecture</h2>
+
+<p><img src="https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/HDFS%20Architecture.png?raw=true" alt="" /></p>
+
+<ol>
+  <li>파일 저장, 읽기 : 어플리케이션에서 클라이언트로 파일 저장 또는 읽기 요청</li>
+  <li>Client : application 요청에 의해 client가 NameNode에 데이터 블록의 위치를 조회</li>
+  <li>NameNode에게 받은 Data block 위치를 통해 Client가 데이터를 직접 조회</li>
+  <li>Heart beat : DataNode가 상태를 주기적으로 보고(일종의 출석체크).</li>
+</ol>
+
+<ul>
+  <li>
+    <p>Secondary NameNode</p>
+
+    <p>NameNode가 망가지면 데이터가 어디에 저장되어 있는지 알 수 없기때문에 읽어들일 수 없으므로, NameNode를 백업해 두었다가 NameNode가 망가지면 다시 복구해 주는 역할</p>
+
+    <p>​</p>
+  </li>
+  <li>
+    <p>HDFS와 MapReduce는 둘다 Master/Slave 구조</p>
+
+    <p><strong>HDFS</strong></p>
+
+    <ul>
+      <li>Master : Name node(메타정보관리)</li>
+      <li>Slave : Data node(실제 데이터)</li>
+    </ul>
+
+    <p><strong>MapReduce</strong></p>
+
+    <ul>
+      <li>
+        <p>Master : JobTracker(TaskTracker의 상태 및 전체 작업의 진행 상황등을 지속적으로 감시하며 일 시적인 장애에 대해 자동 복구 기능 제공)</p>
+      </li>
+      <li>
+        <p>Slave : TaskTracker</p>
+      </li>
+      <li>
+        <p>Map Task</p>
+
+        <p>레코드 단위로 처리해야 하는 작업을 담당</p>
+      </li>
+      <li>
+        <p>Reduce Task</p>
+
+        <p>관련된 데이터 끼리 묶어서 처리해야 하는 작업 담당</p>
+      </li>
+    </ul>
+
+    <p>MapReduce만 코딩. 나머지는 자동.</p>
+  </li>
+  <li>Node : 컴퓨터 한 대라고 생각하면 됨.</li>
+  <li>Name Node, Data Node : HDFS 컨트롤</li>
+  <li>Job tracker, task tracker : MapReduce 컨트롤</li>
+</ul>
+

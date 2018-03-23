@@ -1,0 +1,35 @@
+<h1 id="leetcode-9-palindrome-number">[LeetCode] 9. Palindrome Number</h1>
+
+<blockquote>
+  <p>Determine whether an integer is a palindrome. Do this without extra space.</p>
+
+  <p>주어진 정수가 회문인지 판단하라. 공백은 고려하지 않는다.</p>
+</blockquote>
+
+<h2 id="approch">Approch</h2>
+
+<h3 id="1-palindrome">1. Palindrome</h3>
+
+<p>회문이란 앞에서 부터 읽을 때와 뒤에서 부터 읽을 때가 같은 문장을 말한다</p>
+
+<p>(ex) LEVEL, 12321, 다시합창합시다,</p>
+
+<p>여기서는 공백은 고려하지 않는다.</p>
+
+<h3 id="2-idea">2. Idea</h3>
+
+<p>숫자가 주어질 때 맨 앞과 맨 뒤부터 순차적으로 비교하면 회문인지 알 수 있다.</p>
+
+<h3 id="3-solution">3. Solution</h3>
+
+<p>음수인지 아닌지 판단하고, 음수가 아니면 x를 뒤에서 부터 읽은 값과 x가 동일한지 판단한다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">isPalindrome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">:</span>
+            <span class="bp">False</span>
+        <span class="k">elif</span> <span class="n">x</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>

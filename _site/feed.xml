@@ -1,0 +1,1761 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-03-23T18:08:47+09:00</updated><id>http://localhost:4000/</id><title type="html">Signal</title><subtitle>STATISTICS, ALGORITHMS, DATA STRUCTURE, DATA ENGINEERING, MACHINE LEARNING, DEEP LEARNING, ETC.</subtitle><author><name>Jane</name></author><entry><title type="html">Hadoop 완전분산모드 설치</title><link href="http://localhost:4000/programming/2018/03/01/Hadoop_Setting/" rel="alternate" type="text/html" title="Hadoop 완전분산모드 설치" /><published>2018-03-01T00:00:00+09:00</published><updated>2018-03-01T00:00:00+09:00</updated><id>http://localhost:4000/programming/2018/03/01/Hadoop_Setting</id><content type="html" xml:base="http://localhost:4000/programming/2018/03/01/Hadoop_Setting/">&lt;h2 id=&quot;progamming-hadoop-완전분산모드-설치&quot;&gt;[Progamming] Hadoop 완전분산모드 설치&lt;/h2&gt;
+
+&lt;p&gt;VirtualBox 에 4개의 Ubuntu 를 만든다.&lt;/p&gt;
+
+&lt;p&gt;설치 시 사용자명은 hadoop 으로 한다.&lt;/p&gt;
+
+&lt;p&gt;4개를 따로 설치하거나 1개를 만들어서 3개를 복제한다.&lt;/p&gt;
+
+&lt;p&gt;각각 아래처럼 이름과 IP 주소를 사용할 예정. 
+IP 주소는 각 VirtualBox에서 자동으로 생성되고 뒤에 2자리만 순서대로 변경해서 넣어주면된다.&lt;/p&gt;
+
+&lt;p&gt;192.168.30.101 hadoop01&lt;/p&gt;
+
+&lt;p&gt;192.168.30.102 hadoop02&lt;/p&gt;
+
+&lt;p&gt;192.168.30.103 hadoop03&lt;/p&gt;
+
+&lt;p&gt;192.168.30.104 hadoop04&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/hadoop_copy.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;복제-전에-할-일&quot;&gt;복제 전에 할 일&lt;/h4&gt;
+
+&lt;p&gt;hadoop01에 아래와 같이 먼저 설치한 후 복제해서 hadoop02 ~ hadoop04를 만든다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// vim 설치
+$ sudo apt-get install vim
+
+// 각각 Ubuntu 에 JDK 8 설치
+$ sudo add-apt-repository ppa:webupd8team/java
+$ sudo apt-get update
+$ sudo apt-get install oracle-java8-installer
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 자바 환경설정. 아래 내용 입력 후 저장
+$ vim .bashrc
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/java_path.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;virtualbox-호스트-전용-어댑터-설정&quot;&gt;VirtualBox 호스트 전용 어댑터 설정&lt;/h3&gt;
+
+&lt;h4 id=&quot;1-전체-설정&quot;&gt;1. 전체 설정&lt;/h4&gt;
+
+&lt;p&gt;VirtualBox &amp;gt; 전역 도구(G) &amp;gt; 호스트 네트워크 관리자 &amp;gt; 만들기 &amp;gt; vboxnet0 &amp;gt; 192.168.57.1 &amp;gt; 어댑터 &amp;gt; o 수동으로 어댑터 설정 &amp;gt; IPv4 주소: 192.168.30.1 &amp;gt; IPv4 서브넷 마스크: 255.255.255.0&lt;/p&gt;
+
+&lt;h4 id=&quot;2-각-vm이-종료된-상태에서-어댑터-추가&quot;&gt;2. 각 VM이 종료된 상태에서 어댑터 추가&lt;/h4&gt;
+
+&lt;p&gt;VM &amp;gt; 우클릭 &amp;gt; 설정 &amp;gt; 네트워크 &amp;gt; 어댑터 2 &amp;gt; v 네트워크 어댑터 사용하기 &amp;gt; 다음에 연결됨: 호스트 전용 어댑터 &amp;gt; 이름: vboxnet1 &amp;gt; 확인&lt;/p&gt;
+
+&lt;h4 id=&quot;hadoop-복제&quot;&gt;hadoop 복제&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/host1.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/host2.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/host3.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/host4.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/host6.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/hadoop_copy.png?raw=true&quot; alt=&quot;&quot; /&gt; 
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;3--게스트-os-네트워크-설정&quot;&gt;3.  게스트 OS 네트워크 설정&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// ifconfig 로 체크한 이름 중 enp0s8 을 기준으로 수정하면 됨
+$ ifconfig
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/ifconfig.png?raw=true&quot; alt=&quot;&quot; /&gt; &lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// cat 으로 현재 정보 확인
+$ sudo cat /etc/network/interfaces
+
+// hadoop01 에서 vi 로 아래 내용 추가
+$ sudo vi /etc/network/interfaces
+
+auto enp0s8
+iface enp0s8 inet static
+address 192.168.56.101
+netmask 255.255.255.0
+network 192.168.56.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/interfaces.png?raw=true&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// hostname 수정
+$ sudo vi /etc/hostname
+hadoop01
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/hostname.png?raw=true&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo reboot
+// 리부팅
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;4-호스트-os-에서-ping-으로-체크하면-응답-ok&quot;&gt;4. 호스트 OS 에서 ping 으로 체크하면 응답 OK&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ ping 192.168.56.101
+
+// hadoop02 에서 vi 로 아래 내용 추가
+$ sudo vi /etc/network/interfaces
+
+auto enp0s8
+iface enp0s8 inet static
+address 192.168.56.102
+netmask 255.255.255.0
+network 192.168.56.1
+
+// hostname 수정
+$ sudo vi /etc/hostname
+hadoop02
+
+// 리부팅
+$ sudo reboot
+
+
+// hadoop03 에서 vi 로 아래 내용 추가
+$ sudo vi /etc/network/interfaces
+
+auto enp0s8
+iface enp0s8 inet static
+address 192.168.56.103
+netmask 255.255.255.0
+network 192.168.56.1
+
+// hostname 수정
+$ sudo vi /etc/hostname
+hadoop03
+
+// 리부팅
+$ sudo reboot
+
+
+// hadoop04 에서 vi 로 아래 내용 추가
+$ sudo vi /etc/network/interfaces
+
+auto enp0s8
+iface enp0s8 inet static
+address 192.168.56.104
+netmask 255.255.255.0
+network 192.168.56.1
+
+// hostname 수정
+$ sudo vi /etc/hostname
+
+hadoop04
+// 리부팅
+
+
+$ sudo vi /etc/hosts
+127.0.0.1     localhost
+192.168.56.101  hadoop01
+192.168.56.102  hadoop02
+192.168.56.103  hadoop03
+192.168.56.104  hadoop04
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/hostsetting.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;hadoop02, hadoop03, hadoop04 에도 모두 같은 내용으로 hosts 파일 수정&lt;/p&gt;
+
+&lt;p&gt;hadoop01, hadoop02, hadoop03, hadoop04 모두 openssh-server 설치한다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install openssh-server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/openssh_install.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 아래 부분은 hadoop01 에서만 실행
+$ ssh-keygen -t rsa 
+
+# 엔터 3번
+$ cat ~/.ssh/id_rsa.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys
+
+$ ssh localhost 
+# 처음 한번만 yes, 두번째 접속시 부터는 안 물어봄.
+
+$ exit 
+# exit 로 꼭 나와야 함
+
+// hadoop02, hadoop03, hadoop04 에 키 복사
+$ ssh-copy-id -i /home/hadoop/.ssh/id_rsa.pub hadoop@hadoop02
+$ ssh-copy-id -i /home/hadoop/.ssh/id_rsa.pub hadoop@hadoop03
+$ ssh-copy-id -i /home/hadoop/.ssh/id_rsa.pub hadoop@hadoop04
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/ssh_keys.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 접속 잘 되는지 확인
+$ ssh hadoop@hadoop02
+
+//hadoop 1.2.1 다운로드
+$ wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
+
+// 압축 해제
+$ tar zxvf hadoop-1.2.1.tar.gz
+
+$ cd hadoop-1.2.1/
+$ cd conf
+$ vi hadoop-env.sh
+
+// 맨아래에 내용 추가
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export HADOOP_HOME=/home/hadoop/hadoop-1.2.1
+export HADOOP_HOME_WARN_SUPPRESS=&quot;TRUE&quot;
+
+export HADOOP_HEAPSIZE=1024     // 메모리 설정
+export HADOOP_PID_DIR=/home/hadoop/hadoop-1.2.1/pids
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/path.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+$ vi core-site.xml
+
+&amp;lt;?xml version=&quot;1.0&quot;?&amp;gt;
+&amp;lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&amp;gt;
+
+&amp;lt;!-- Put site-specific property overrides in this file. --&amp;gt;
+&amp;lt;configuration&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;fs.default.name&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;hdfs://hadoop01:9000&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;hadoop.tmp.dir&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;/home/hadoop/hadoop-data&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+&amp;lt;/configuration&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/conf.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ vi hdfs-site.xml
+
+// dfs.replication : 복제갯수
+ 
+
+&amp;lt;?xml version=&quot;1.0&quot;?&amp;gt;
+&amp;lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&amp;gt;
+
+&amp;lt;!-- Put site-specific property overrides in this file. --&amp;gt;
+
+&amp;lt;configuration&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.replication&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;3&amp;lt;/value&amp;gt;    
+    &amp;lt;/property&amp;gt;
+
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.http.address&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;hadoop01:50070&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.secondary.http.address&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;hadoop02:50090&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+&amp;lt;/configuration&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/hdfs-site.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 맵리듀스 설정
+$ vi mapred-site.xml
+
+&amp;lt;?xml version=&quot;1.0&quot;?&amp;gt;
+&amp;lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&amp;gt;
+
+&amp;lt;!-- Put site-specific property overrides in this file. --&amp;gt;
+
+&amp;lt;configuration&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;mapred.job.tracker&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;hadoop01:9001&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+&amp;lt;/configuration&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/mapred-site.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd hadoop-1.2.1/conf
+$ ls
+// secondary namenode: hadoop02
+// slaves : datanode. hadoop02, hadoop03, hadoop04
+
+$ vi masters 
+hadoop02
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/masters.png?raw=true&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ vi slaves
+hadoop02
+hadoop03
+hadoop04
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/slaves.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 맨 상위로 이동
+$ cd ~
+
+// hadoop-1.2.1 통째로 압축
+$ tar zcvf hadoop.tar.gz hadoop-1.2.1 
+
+// hadoop02, hadoop03, hadoop04로 복사
+$ scp hadoop.tar.gz hadoop@hadoop02:/home/hadoop
+$ scp hadoop.tar.gz hadoop@hadoop03:/home/hadoop
+$ scp hadoop.tar.gz hadoop@hadoop04:/home/hadoop
+
+// 압축풀기
+$ ssh hadoop@hadoop02
+$ tar zxvf hadoop.tar.gz
+$ exit
+
+$ ssh hadoop@hadoop03
+$ tar zxvf hadoop.tar.gz
+$ exit
+$ ssh hadoop@hadoop04
+$ tar zxvf hadoop.tar.gz
+$ exit
+
+// 하둡 경로 설정 
+$ vim .bashrc
+export HADOOP_INSTALL=/home/hadoop/hadoop-1.2.1
+exprot PATH=$PATH:$HADOOP_INSTALL/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/path_setting.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ exit
+
+
+// 리부트
+$ sudo reboot
+// hadoop 실행
+$ hadoop
+
+// 반드시 hadoop01 에서 실행
+$ hadoop namenode -format
+$ start-all.sh
+
+$ jps
+JobTracker
+Jps
+NameNode 
+// 3가지 떠있는 것 확인 가능
+// 나머지 hadoop2,3,4에서도 동일 명령어로 확인 가능
+
+// hadoop01, hadoop02, hadoop03, hadoop04 에서 jps 실행해서 확인
+// hadoop01은 NameNode, JobTracker
+// hadoop02은 SecondaryNameNode, DataNode, TaskTracker
+// hadoop03은 DataNode, TaskTracker
+// hadoop04은 DataNode, TaskTracker 가 보이면 OK
+
+// 반드시 종료 시켜야 함
+$ stop-all.sh 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;브라우저로 http://hadoop01:50070 으로 접속해서 HDFS 확인&lt;/p&gt;
+
+&lt;p&gt;브라우저로  http://hadoop01:50030 으로 접속해서 MapReduce 확인&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/check1.png?raw=true&quot; alt=&quot;&quot; /&gt;
+&lt;br /&gt;&lt;br /&gt;
+&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/Hadoop/check2.png?raw=true&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;</content><author><name>Jane</name></author><summary type="html">VirtualBox를 이용하여 Hadoop을 완전분산모드로 설치하는 방법 정리</summary></entry><entry><title type="html">BFS(Breadth-First Search 너비우선탐색)</title><link href="http://localhost:4000/algorithms/2018/03/01/BFS/" rel="alternate" type="text/html" title="BFS(Breadth-First Search 너비우선탐색)" /><published>2018-03-01T00:00:00+09:00</published><updated>2018-03-01T00:00:00+09:00</updated><id>http://localhost:4000/algorithms/2018/03/01/BFS</id><content type="html" xml:base="http://localhost:4000/algorithms/2018/03/01/BFS/">&lt;h2 id=&quot;algorithms-bfs--breadth-first-search-너비우선탐색&quot;&gt;[Algorithms] BFS : Breadth-First Search 너비우선탐색&lt;/h2&gt;
+
+&lt;h2 id=&quot;graph-algorithms&quot;&gt;Graph Algorithms&lt;/h2&gt;
+
+&lt;p&gt;shortest-path problem(최단경로 문제)을 해결할 때 사용한다.&lt;/p&gt;
+
+&lt;h3 id=&quot;순서&quot;&gt;순서&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;문제를 그래프로 모형화&lt;/li&gt;
+  &lt;li&gt;너비 우선탐색으로 문제 해결&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;그래프&quot;&gt;그래프&lt;/h3&gt;
+
+&lt;p&gt;연결 집합을 모형화한 것을 그래프라고 한다.&lt;/p&gt;
+
+&lt;p&gt;node와 edge로 이루어져 있다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mathworld.wolfram.com/images/eps-gif/GraphNodesEdges_1000.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;출처 : http://mathworld.wolfram.com/GraphEdge.html&lt;/p&gt;
+
+&lt;h2 id=&quot;너비우선탐색&quot;&gt;너비우선탐색&lt;/h2&gt;
+
+&lt;h3 id=&quot;개념&quot;&gt;개념&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;그래프 전체를 탐색하는 방법&lt;/em&gt;&lt;/strong&gt; 중 하나이다. 너비우선탐색, 깊이우선탐색이 있다.&lt;/p&gt;
+
+&lt;p&gt;Facebook에서 연결되는 사람(촌) 중에 과자 회사에 다니고 있는 사람이 있는지 찾으려고 한다고 가정해보자.&lt;/p&gt;
+
+&lt;p&gt;A는 시작점인 ‘나’자신이고, B, C, D는 1촌, E, F, G, H는 2촌, I, J, K는 3촌이 된다. K가 과자 회사에 다닌다고 가정한다면 목표는 K가 된다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Algorithms/2018/Feb/BFS.png?raw=true&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;시작점 A(나)&lt;/strong&gt;에서 &lt;strong&gt;목표 K(과자회사에 다니는 사람)&lt;/strong&gt;까지 도달하는 것을 기준으로 탐색을 한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;시작점 A에서 갈 수 있는 후보를 확인한다. 이때 후보 탐색은 먼저 나와 닿아 있는 1촌에서 탐색해야 한다. 후보 : B, C, D&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;하나의 정점을 선택하는데, 이때 &lt;strong&gt;선택 기준&lt;/strong&gt;은 후보 중 가장 먼저 추가된 것이다.&lt;/p&gt;
+
+    &lt;p&gt;B, C, D 처럼 동일 시점에 생긴 경우 아무거나 선택해도 된다.&lt;/p&gt;
+
+    &lt;p&gt;후보 정점은 &lt;strong&gt;FIFO(선입선출)&lt;/strong&gt; 구조, 즉, Queue 데이터 구조이다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;이제 1촌인 B로 이동하여 B의 1촌 중에  살펴본다. 즉, 후보가 될 수 있는 정점을 탐색한다.  후보 : E&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;마찬가지로 C로 이동하여 C에서 후보가 될 수 있는 점정를 탐색한다.  후보 : F, G&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;D로 이동하여 D에서 후보가 될 수 있는 정점을 탐색한다.  후보 : H&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;E, F, G, H가 있는 부분을 위와 같은 방법으로 탐색한다.&lt;/p&gt;
+
+    &lt;p&gt;탐색은 목표인 K에 도달하거나 모든 탐색이 완료될 때까지 반복한다.&lt;/p&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;탐색 순서를 정리해 보면 아래와 같다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A -&amp;gt; B, C, D&lt;/p&gt;
+
+&lt;p&gt;B -&amp;gt; E&lt;/p&gt;
+
+&lt;p&gt;C -&amp;gt; F, G&lt;/p&gt;
+
+&lt;p&gt;D -&amp;gt; H&lt;/p&gt;
+
+&lt;p&gt;E -&amp;gt; I&lt;/p&gt;
+
+&lt;p&gt;F&lt;/p&gt;
+
+&lt;p&gt;G&lt;/p&gt;
+
+&lt;p&gt;H -&amp;gt; J, K&lt;/p&gt;
+
+&lt;p&gt;I&lt;/p&gt;
+
+&lt;p&gt;J&lt;/p&gt;
+
+&lt;p&gt;K (목표 도달)&lt;/p&gt;
+
+&lt;h3 id=&quot;구현하기&quot;&gt;구현하기&lt;/h3&gt;
+
+&lt;p&gt;관계를 표현하는 자료구조 Hash table로 그래프를 구현하고, Queue를 이용하여 알고리즘을 구현한다.&lt;/p&gt;
+
+&lt;h4 id=&quot;그래프-구현하기&quot;&gt;그래프 구현하기&lt;/h4&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;    &lt;span class=&quot;c&quot;&gt;# hash table 생성&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;A&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'B'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'C'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'D'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;    &lt;span class=&quot;c&quot;&gt;# Key값 A에 Value로 B, C, D 넣음. 즉, A의 1촌 B, C, D가 조회된다.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;B&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;E&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;C&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;F&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;G&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;D&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;H&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;E&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;I&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;F&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;G&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;H&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;J&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;K&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;I&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;J&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;K&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;알고리즘-구현하기&quot;&gt;알고리즘 구현하기&lt;/h3&gt;
+
+&lt;h4 id=&quot;순서-1&quot;&gt;순서&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;비어 있는 queue를 준비&lt;/li&gt;
+  &lt;li&gt;확인할 명단을 queue에 넣는다.&lt;/li&gt;
+  &lt;li&gt;queue에서 한사람씩 꺼내서 과자회사에 다니는 사람이 맞는지 확인한다.&lt;/li&gt;
+  &lt;li&gt;맞으면 탐색 종료&lt;/li&gt;
+  &lt;li&gt;과자회사에 다니는 사람이 없으면 이웃을 queue에 추가&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;다시 위 그래프로 생각해보면,&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Algorithms/2018/Feb/BFS.png?raw=true&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;비어있는 queue &lt;code class=&quot;highlighter-rouge&quot;&gt;srch = deque()&lt;/code&gt; 에 &lt;code class=&quot;highlighter-rouge&quot;&gt;graph['A'] = ['B', 'C', 'D']&lt;/code&gt; 가 들어간다. &lt;code class=&quot;highlighter-rouge&quot;&gt;srch = graph['A']&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;'B'&lt;/code&gt;부터 한 사람씩 꺼내서 &lt;code class=&quot;highlighter-rouge&quot;&gt;'pop('B')'&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;'B'=='과자회사 다니는 사람'&lt;/code&gt; 이 맞는지 확인한다.&lt;/p&gt;
+
+&lt;p&gt;맞느면 탐색을 종료하고, 아니면 &lt;code class=&quot;highlighter-rouge&quot;&gt;'B'&lt;/code&gt;의 이웃&lt;code class=&quot;highlighter-rouge&quot;&gt;'E'&lt;/code&gt;를 que에 추가한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;'C','D'&lt;/code&gt;도 마찬가지 방법으로 탐색한다.&lt;/p&gt;
+
+&lt;h4 id=&quot;dequedouble-ended-queue&quot;&gt;deque(double-ended queue)&lt;/h4&gt;
+
+&lt;p&gt;Queue + Pop이 합쳐진 개념이다. 양쪽이 열려 있기 때문에, 양방향으로 push, pop이 가능하다.&lt;/p&gt;
+
+&lt;p&gt;즉, 크기가 가변적이다. 하지만 중간에 데이터를 삽입, 삭제하기 어렵다. 
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;python&quot;&gt;Python&lt;/h5&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;err&quot;&gt;작성중&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;....&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;java&quot;&gt;JAVA&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;// Java program to print BFS traversal from a given source vertex.
+// BFS(int s) traverses vertices reachable from s.
+import java.io.*;
+import java.util.*;
+ 
+// This class represents a directed graph using adjacency list
+// representation
+class Graph
+{
+    private int V;   // No. of vertices
+    private LinkedList&amp;lt;Integer&amp;gt; adj[]; //Adjacency Lists
+ 
+    // Constructor
+    Graph(int v)
+    {
+        V = v;
+        adj = new LinkedList[v];
+        for (int i=0; i&amp;lt;v; ++i)
+            adj[i] = new LinkedList();
+    }
+ 
+    // Function to add an edge into the graph
+    void addEdge(int v,int w)
+    {
+        adj[v].add(w);
+    }
+ 
+    // prints BFS traversal from a given source s
+    void BFS(int s)
+    {
+        // Mark all the vertices as not visited(By default
+        // set as false)
+        boolean visited[] = new boolean[V];
+ 
+        // Create a queue for BFS
+        LinkedList&amp;lt;Integer&amp;gt; queue = new LinkedList&amp;lt;Integer&amp;gt;();
+ 
+        // Mark the current node as visited and enqueue it
+        visited[s]=true;
+        queue.add(s);
+ 
+        while (queue.size() != 0)
+        {
+            // Dequeue a vertex from queue and print it
+            s = queue.poll();
+            System.out.print(s+&quot; &quot;);
+ 
+            // Get all adjacent vertices of the dequeued vertex s
+            // If a adjacent has not been visited, then mark it
+            // visited and enqueue it
+            Iterator&amp;lt;Integer&amp;gt; i = adj[s].listIterator();
+            while (i.hasNext())
+            {
+                int n = i.next();
+                if (!visited[n])
+                {
+                    visited[n] = true;
+                    queue.add(n);
+                }
+            }
+        }
+    }
+ 
+    // Driver method to
+    public static void main(String args[])
+    {
+        Graph g = new Graph(4);
+ 
+        g.addEdge(0, 1);
+        g.addEdge(0, 2);
+        g.addEdge(1, 2);
+        g.addEdge(2, 0);
+        g.addEdge(2, 3);
+        g.addEdge(3, 3);
+ 
+        System.out.println(&quot;Following is Breadth First Traversal &quot;+
+                           &quot;(starting from vertex 2)&quot;);
+ 
+        g.BFS(2);
+    }
+}
+// This code is contributed by Aakash Hasija
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;참고문헌&quot;&gt;참고문헌&lt;/h4&gt;
+
+&lt;p&gt;[1] https://ko.khanacademy.org/computing/computer-science/algorithms/breadth-first-search/a/breadth-first-search-and-its-uses&lt;/p&gt;
+
+&lt;p&gt;[2] https://en.wikipedia.org/wiki/Breadth-first_search&lt;/p&gt;
+
+&lt;p&gt;[3] http://jpython.blogspot.kr/2012/12/bfs-algorithm-in-python.html&lt;/p&gt;
+
+&lt;p&gt;[4] https://www.geeksforgeeks.org/breadth-first-traversal-for-a-graph/&lt;/p&gt;</content><author><name>Jane</name></author><summary type="html">Breadth-First Search(너비우선탐색)에 대해 학습하고 구현해보기</summary></entry><entry><title type="html">9. Palindrome Number</title><link href="http://localhost:4000/algorithms/2018/02/28/LeetCode_9/" rel="alternate" type="text/html" title="9. Palindrome Number" /><published>2018-02-28T00:00:00+09:00</published><updated>2018-02-28T00:00:00+09:00</updated><id>http://localhost:4000/algorithms/2018/02/28/LeetCode_9</id><content type="html" xml:base="http://localhost:4000/algorithms/2018/02/28/LeetCode_9/">&lt;h1 id=&quot;leetcode-9-palindrome-number&quot;&gt;[LeetCode] 9. Palindrome Number&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Determine whether an integer is a palindrome. Do this without extra space.&lt;/p&gt;
+
+  &lt;p&gt;주어진 정수가 회문인지 판단하라. 공백은 고려하지 않는다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;approch&quot;&gt;Approch&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-palindrome&quot;&gt;1. Palindrome&lt;/h3&gt;
+
+&lt;p&gt;회문이란 앞에서 부터 읽을 때와 뒤에서 부터 읽을 때가 같은 문장을 말한다&lt;/p&gt;
+
+&lt;p&gt;(ex) LEVEL, 12321, 다시합창합시다,&lt;/p&gt;
+
+&lt;p&gt;여기서는 공백은 고려하지 않는다.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-idea&quot;&gt;2. Idea&lt;/h3&gt;
+
+&lt;p&gt;숫자가 주어질 때 맨 앞과 맨 뒤부터 순차적으로 비교하면 회문인지 알 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&quot;3-solution&quot;&gt;3. Solution&lt;/h3&gt;
+
+&lt;p&gt;음수인지 아닌지 판단하고, 음수가 아니면 x를 뒤에서 부터 읽은 값과 x가 동일한지 판단한다.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;isPalindrome&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[::&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Jane</name></author><summary type="html">LeetCode #9, easy</summary></entry><entry><title type="html">HDFS Architecture</title><link href="http://localhost:4000/programming/2018/02/27/HDFS-Architecture/" rel="alternate" type="text/html" title="HDFS Architecture" /><published>2018-02-27T00:00:00+09:00</published><updated>2018-02-27T00:00:00+09:00</updated><id>http://localhost:4000/programming/2018/02/27/HDFS%20Architecture</id><content type="html" xml:base="http://localhost:4000/programming/2018/02/27/HDFS-Architecture/">&lt;h2 id=&quot;programming-hdfs-architecture&quot;&gt;[Programming] HDFS Architecture&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/img/post/Programming/HDFS%20Architecture.png?raw=true&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;파일 저장, 읽기 : 어플리케이션에서 클라이언트로 파일 저장 또는 읽기 요청&lt;/li&gt;
+  &lt;li&gt;Client : application 요청에 의해 client가 NameNode에 데이터 블록의 위치를 조회&lt;/li&gt;
+  &lt;li&gt;NameNode에게 받은 Data block 위치를 통해 Client가 데이터를 직접 조회&lt;/li&gt;
+  &lt;li&gt;Heart beat : DataNode가 상태를 주기적으로 보고(일종의 출석체크).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Secondary NameNode&lt;/p&gt;
+
+    &lt;p&gt;NameNode가 망가지면 데이터가 어디에 저장되어 있는지 알 수 없기때문에 읽어들일 수 없으므로, NameNode를 백업해 두었다가 NameNode가 망가지면 다시 복구해 주는 역할&lt;/p&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;HDFS와 MapReduce는 둘다 Master/Slave 구조&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;HDFS&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Master : Name node(메타정보관리)&lt;/li&gt;
+      &lt;li&gt;Slave : Data node(실제 데이터)&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;p&gt;&lt;strong&gt;MapReduce&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;
+        &lt;p&gt;Master : JobTracker(TaskTracker의 상태 및 전체 작업의 진행 상황등을 지속적으로 감시하며 일 시적인 장애에 대해 자동 복구 기능 제공)&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;Slave : TaskTracker&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;Map Task&lt;/p&gt;
+
+        &lt;p&gt;레코드 단위로 처리해야 하는 작업을 담당&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;Reduce Task&lt;/p&gt;
+
+        &lt;p&gt;관련된 데이터 끼리 묶어서 처리해야 하는 작업 담당&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;p&gt;MapReduce만 코딩. 나머지는 자동.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Node : 컴퓨터 한 대라고 생각하면 됨.&lt;/li&gt;
+  &lt;li&gt;Name Node, Data Node : HDFS 컨트롤&lt;/li&gt;
+  &lt;li&gt;Job tracker, task tracker : MapReduce 컨트롤&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Jane</name></author><summary type="html">HDFS의 기본 구조에 대해 정리</summary></entry><entry><title type="html">Hadoop 설치 및 WordCount 예제 실습</title><link href="http://localhost:4000/programming/2018/02/24/Hadoop_wordCount_example/" rel="alternate" type="text/html" title="Hadoop 설치 및 WordCount 예제 실습" /><published>2018-02-24T00:00:00+09:00</published><updated>2018-02-24T00:00:00+09:00</updated><id>http://localhost:4000/programming/2018/02/24/Hadoop_wordCount_example</id><content type="html" xml:base="http://localhost:4000/programming/2018/02/24/Hadoop_wordCount_example/">&lt;h2 id=&quot;hadoop&quot;&gt;Hadoop&lt;/h2&gt;
+
+&lt;p&gt;Hadoop = HDFS + MapReduce&lt;/p&gt;
+
+&lt;h3 id=&quot;mode-3가지&quot;&gt;Mode 3가지&lt;/h3&gt;
+
+&lt;h4 id=&quot;hdfs-설치방식&quot;&gt;HDFS 설치방식&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Stand alone (독립실행모드) : 기본 실행모드. 분산저장 안함. 코딩은 가능.&lt;/li&gt;
+  &lt;li&gt;Pseudo-distributed (가상분산모드) : 하나의 컴퓨터에 설치&lt;/li&gt;
+  &lt;li&gt;Fully distributed (완전분산모드) : 여러 대의 컴퓨터에 설치&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;순서&quot;&gt;순서&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;VirtualBox 설치&lt;/li&gt;
+  &lt;li&gt;Ubuntu 14.04.2 설치 // 이후에는 VirtualBox 내의 Ubuntu 에서 진행&lt;/li&gt;
+  &lt;li&gt;JDK 설치&lt;/li&gt;
+  &lt;li&gt;하둡 다운로드&lt;/li&gt;
+  &lt;li&gt;하둡 Stand-alone 모드 구성&lt;/li&gt;
+  &lt;li&gt;하둡 가상 분산 모드 구성&lt;/li&gt;
+  &lt;li&gt;이클립스 다운로드, 설정&lt;/li&gt;
+  &lt;li&gt;WordCount 예제 코딩&lt;/li&gt;
+  &lt;li&gt;테스트&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;ubuntu에-jdk-8-설치&quot;&gt;Ubuntu에 JDK 8 설치&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+$ sudo add-apt-repository ppa:webupd8team/java
+$ sudo apt-get update
+$ sudo apt-get install oracle-java8-installer
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;하둡-다운로드-후-압축-해제&quot;&gt;하둡 다운로드 후 압축 해제&lt;/h3&gt;
+
+&lt;p&gt;URL : &lt;a href=&quot;https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz&quot;&gt;https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz&lt;/a&gt; 에서 다운로드&lt;/p&gt;
+
+&lt;p&gt;아래 명령어로 압축해제 및 설정.&lt;/p&gt;
+
+&lt;p&gt;참고 : 앞으로 나오는 /home/유저명/ 에서 “유저명” 부분은 “여러분 자신의 유저명”으로 수정하여 입력하면 된다.&lt;/p&gt;
+
+&lt;h4 id=&quot;vim-설정&quot;&gt;vim 설정&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ vi .vimrc
+
+# 아래 내용 입력 후 저장
+filetype plugin on
+syntax on
+
+set number
+set paste
+
+set ruler
+set laststatus=2
+
+$ cat .vimrc     # 확인
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd Downloads
+$ cp hadoop-1.2.1.tar.gz ~       # ~ : home folder
+$ cd ~
+$ tar zxvf hadoop-1.2.1.tar.gz
+$ sudo apt-get install vim
+
+$ vim .bashrc # 맨 끝에 아래 3줄 추가
+
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export HADOOP_INSTALL=/home/유저명/hadoop-1.2.1
+export PATH=PATH:HADOOP_INSTALL/bin
+
+$ source .bashrc # 변경 내용 적용
+$ hadoop # 메시지가 정상 출력되면 OK
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;하둡-stand-alone-모드-구성-및-예제-테스트&quot;&gt;하둡 Stand-alone 모드 구성 및 예제 테스트&lt;/h4&gt;
+
+&lt;p&gt;아래 명령어로 테스트.&lt;/p&gt;
+
+&lt;p&gt;폴더명 중복 안되게 해야 한다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd /home/유저명/hadoop-1.2.1
+$ mkdir input
+$ cp README.txt input
+$ hadoop jar hadoop-examples-1.2.1.jar wordcount input output
+# cat output/part-r-00000 # 결과 확인
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;jar : 파일을 실행하는 명령어&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;hadoop-examples-1.2.1.jar 파일이 하둡 예제파일&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ hadoop jar hadoop-examples-1.2.1.jar wordcount input output&lt;/code&gt; : hadoop / 파일실행 / 파일명 / 할일 /입력폴더 / 출력폴더&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 출력 결과
+
+18/02/24 14:10:18 INFO util.NativeCodeLoader: Loaded the native-hadoop library
+18/02/24 14:10:18 INFO input.FileInputFormat: Total input paths to process : 1
+18/02/24 14:10:18 WARN snappy.LoadSnappy: Snappy native library not loaded
+18/02/24 14:10:18 INFO mapred.JobClient: Running job: job_local1707454656_0001
+18/02/24 14:10:19 INFO mapred.LocalJobRunner: Waiting for map tasks
+18/02/24 14:10:19 INFO mapred.LocalJobRunner: Starting task: attempt_local1707454656_0001_m_000000_0
+18/02/24 14:10:19 INFO util.ProcessTree: setsid exited with exit code 0
+18/02/24 14:10:19 INFO mapred.Task:  Using ResourceCalculatorPlugin : org.apache.hadoop.util.LinuxResourceCalculatorPlugin@415eb82d
+18/02/24 14:10:19 INFO mapred.MapTask: Processing split: file:/home/jane/hadoop-1.2.1/input:0+1366
+18/02/24 14:10:19 INFO mapred.MapTask: io.sort.mb = 100
+18/02/24 14:10:19 INFO mapred.MapTask: data buffer = 79691776/99614720
+18/02/24 14:10:19 INFO mapred.MapTask: record buffer = 262144/327680
+18/02/24 14:10:19 INFO mapred.MapTask: Starting flush of map output
+18/02/24 14:10:19 INFO mapred.MapTask: Finished spill 0
+18/02/24 14:10:19 INFO mapred.Task: Task:attempt_local1707454656_0001_m_000000_0 is done. And is in the process of commiting
+18/02/24 14:10:19 INFO mapred.LocalJobRunner: 
+18/02/24 14:10:19 INFO mapred.Task: Task 'attempt_local1707454656_0001_m_000000_0' done.
+18/02/24 14:10:19 INFO mapred.LocalJobRunner: Finishing task: attempt_local1707454656_0001_m_000000_0
+18/02/24 14:10:19 INFO mapred.LocalJobRunner: Map task executor complete.
+18/02/24 14:10:19 INFO mapred.Task:  Using ResourceCalculatorPlugin : org.apache.hadoop.util.LinuxResourceCalculatorPlugin@2f017655
+18/02/24 14:10:19 INFO mapred.LocalJobRunner: 
+18/02/24 14:10:19 INFO mapred.Merger: Merging 1 sorted segments
+18/02/24 14:10:19 INFO mapred.Merger: Down to the last merge-pass, with 1 segments left of total size: 1832 bytes
+18/02/24 14:10:19 INFO mapred.LocalJobRunner: 
+18/02/24 14:10:19 INFO mapred.Task: Task:attempt_local1707454656_0001_r_000000_0 is done. And is in the process of commiting
+18/02/24 14:10:19 INFO mapred.LocalJobRunner: 
+18/02/24 14:10:19 INFO mapred.Task: Task attempt_local1707454656_0001_r_000000_0 is allowed to commit now
+18/02/24 14:10:19 INFO output.FileOutputCommitter: Saved output of task 'attempt_local1707454656_0001_r_000000_0' to output
+18/02/24 14:10:19 INFO mapred.LocalJobRunner: reduce &amp;gt; reduce
+18/02/24 14:10:19 INFO mapred.Task: Task 'attempt_local1707454656_0001_r_000000_0' done.
+18/02/24 14:10:19 INFO mapred.JobClient:  map 100% reduce 100%
+18/02/24 14:10:19 INFO mapred.JobClient: Job complete: job_local1707454656_0001
+18/02/24 14:10:19 INFO mapred.JobClient: Counters: 20
+18/02/24 14:10:19 INFO mapred.JobClient:   Map-Reduce Framework
+18/02/24 14:10:19 INFO mapred.JobClient:     Spilled Records=262
+18/02/24 14:10:19 INFO mapred.JobClient:     Map output materialized bytes=1836
+18/02/24 14:10:19 INFO mapred.JobClient:     Reduce input records=131
+18/02/24 14:10:19 INFO mapred.JobClient:     Virtual memory (bytes) snapshot=0
+18/02/24 14:10:19 INFO mapred.JobClient:     Map input records=31
+18/02/24 14:10:19 INFO mapred.JobClient:     SPLIT_RAW_BYTES=99
+18/02/24 14:10:19 INFO mapred.JobClient:     Map output bytes=2055
+18/02/24 14:10:19 INFO mapred.JobClient:     Reduce shuffle bytes=0
+18/02/24 14:10:19 INFO mapred.JobClient:     Physical memory (bytes) snapshot=0
+18/02/24 14:10:19 INFO mapred.JobClient:     Reduce input groups=131
+18/02/24 14:10:19 INFO mapred.JobClient:     Combine output records=131
+18/02/24 14:10:19 INFO mapred.JobClient:     Reduce output records=131
+18/02/24 14:10:19 INFO mapred.JobClient:     Map output records=179
+18/02/24 14:10:19 INFO mapred.JobClient:     Combine input records=179
+18/02/24 14:10:19 INFO mapred.JobClient:     CPU time spent (ms)=0
+18/02/24 14:10:19 INFO mapred.JobClient:     Total committed heap usage (bytes)=357564416
+18/02/24 14:10:19 INFO mapred.JobClient:   File Input Format Counters 
+18/02/24 14:10:19 INFO mapred.JobClient:     Bytes Read=1366
+18/02/24 14:10:19 INFO mapred.JobClient:   FileSystemCounters
+18/02/24 14:10:19 INFO mapred.JobClient:     FILE_BYTES_WRITTEN=395714
+18/02/24 14:10:19 INFO mapred.JobClient:     FILE_BYTES_READ=290330
+18/02/24 14:10:19 INFO mapred.JobClient:   File Output Format Counters 
+18/02/24 14:10:19 INFO mapred.JobClient:     Bytes Written=1326
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;하둡-가상분산-모드-구성&quot;&gt;하둡 가상분산 모드 구성&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;5개의 프로세스&lt;/strong&gt; : Name node, Secondary Namenode, Data node, Job tracker, Tast tracker&lt;/p&gt;
+
+&lt;p&gt;아래 순서로 네개 파일 수정해 준다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;hadoop-env.sh : 환경변수 설정&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;core-site.xml : HDFS와 MapReduce에서 공통적으로 사용할 환경정보 설정&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;hdfs-site.xml : HDFS에서 사용할 환경정보 설정&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;mapred-site.xml : MapReduce에서 사용할 환경정보 설정&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;hadoop-envsh-수정&quot;&gt;hadoop-env.sh 수정&lt;/h4&gt;
+&lt;p&gt;JAVA_HOME 파라미터를 실제 JDK가 설치된 경로로 수정하는 작업&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ vim /home/유저명/hadoop-1.2.1/conf/hadoop-env.sh # 맨 끝에 3줄 추가
+
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export HADOOP_HOME=/home/유저명/hadoop-1.2.1
+export HADOOP_HOME_WARN_SUPPRESS=&quot;TRUE&quot;  # Warning: $HADOOP_HOME is deprecated.
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;보안-인증-관련-명령-실행&quot;&gt;보안 인증 관련 명령 실행&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 컴퓨터끼리 연결해서 접속할 수 있게 ssh 설정
+
+$ sudo apt-get install openssh-server
+$ sudo /etc/init.d/ssh restart # ssh 재실행
+$ netstat -ntl # 0:::22 있으면 OK
+
+
+# 접속할 때마다 비밀번호 묻지 않게 public key 공유(리눅스의 기능)
+
+$ ssh-keygen -t rsa # 엔터 3번
+$ cat ~/.ssh/id_rsa.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys
+$ ssh localhost # 처음 한번만 yes, 두번째 접속시 부터는 안 물어봄.
+$ exit # exit 로 꼭 나와야 함
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;core-sitexml-하둡의-핵심-설정-파일-편집&quot;&gt;core-site.xml (하둡의 핵심 설정 파일) 편집&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ vim /home/유저명/hadoop-1.2.1/conf/core-site.xml
+
+&amp;lt;?xml version=&quot;1.0&quot;?&amp;gt;
+&amp;lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&amp;gt;
+&amp;lt;!-- Put site-specific property overrides in this file. --&amp;gt;
+&amp;lt;configuration&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;fs.default.name&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;hdfs://localhost:9000&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;hadoop.tmp.dir&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;/home/유저명/hadoop-1.2.1/hadoop-${user.name}&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+&amp;lt;/configuration&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;fs.default.name : HDFS의 기본 이름을 의미. URI 형태로 사용.&lt;/li&gt;
+  &lt;li&gt;hadoop.tmp.dir : 하둡에서 발생하는 임시 데이터를 저장하기 위한 공간&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;hdfs-sitexml-하둡-분산-파일-관련-설정-편집&quot;&gt;hdfs-site.xml (하둡 분산 파일 관련 설정) 편집&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ vim /home/유저명/hadoop-1.2.1/conf/hdfs-site.xml
+
+&amp;lt;?xml version=&quot;1.0&quot;?&amp;gt;
+&amp;lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&amp;gt;
+&amp;lt;!-- Put site-specific property overrides in this file. --&amp;gt;
+&amp;lt;configuration&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.name.dir&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;/home/유저명/hadoop-1.2.1/dfs/name&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.name.edits.dir&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;${dfs.name.dir}&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.data.dir&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;/home/유저명/hadoop-1.2.1/dfs/data&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+&amp;lt;/configuration&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;dfs.replication : HDFS의 저장될 데이터의 복제본 갯수를 의미. &lt;br /&gt;
+가상분산모드 : 1 &lt;br /&gt;
+완전분산모드 : 3&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;dfs.http.address : 네임노드용 웹서버의 주소값. &lt;br /&gt; 
+기본값 : 0.0.0.0:50070&lt;/li&gt;
+  &lt;li&gt;dfs.secondary.http.address : 보조네임노드용 웹서버 주소값. &lt;br /&gt; 
+기본값 : 0.0.0.0:50090&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;mapred-sitexml-하둡-맵리듀스-관련-설정-편집&quot;&gt;mapred-site.xml (하둡 맵리듀스 관련 설정) 편집&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ vim /home/유저명/hadoop-1.2.1/conf/mapred-site.xml
+
+&amp;lt;?xml version=&quot;1.0&quot;?&amp;gt;
+&amp;lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&amp;gt;
+&amp;lt;!-- Put site-specific property overrides in this file. --&amp;gt;
+&amp;lt;configuration&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;mapred.job.tracker&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;localhost:9001&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;mapred.local.dir&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;${hadoop.tmp.dir}/mapred/local&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;mapred.system.dir&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;${hadoop.tmp.dir}/mapred/system&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+&amp;lt;/configuration&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;mapred.job.tracker : JobTracker 데몬의 주소를 의미. 데이터 노드에서 이 주소로 맵리듀스 작업을 요청.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;namenode-포맷--namenode-는-처음에-꼭-한번-만-포맷해야-한다&quot;&gt;namenode 포맷 ( namenode 는 처음에 꼭 한번 만 포맷해야 한다.)&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ hadoop namenode -format
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;하둡-시작-및-확인&quot;&gt;하둡 시작 및 확인&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd /home/유저명/hadoop-1.2.1
+$ bin/start-all.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;하둡-프로세스-확인&quot;&gt;하둡 프로세스 확인&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jps # 5개의 프로세스 출력되면 OK : namenode, secondarynamenode, datanode, jobtracker, tasktracker
+
+# 브라우저에서 접속해서 확인
+
+URL : http://localhost:50070/dfshealth.jsp   // HDFS 확인
+URL : http://localhost:50030/jobtracker.jsp // MapReduce 확인
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;이클립스-다운로드-설정&quot;&gt;이클립스 다운로드, 설정&lt;/h3&gt;
+
+&lt;h4 id=&quot;이클립스-다운로드&quot;&gt;이클립스 다운로드&lt;/h4&gt;
+
+&lt;p&gt;URL : &lt;a href=&quot;http://www.eclipse.org/downloads/&quot;&gt;http://www.eclipse.org/downloads/&lt;/a&gt; 로 접속&lt;/p&gt;
+
+&lt;p&gt;Eclipse IDE for Java Developers 를 다운로드&lt;/p&gt;
+
+&lt;h4 id=&quot;압축해제&quot;&gt;압축해제&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd Downloads
+$ tar zxvf eclipse-java-luna-SR2-linux-gtk-x86_64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;이클립스를-사용하여-maven-프로젝트-생성&quot;&gt;이클립스를 사용하여 Maven 프로젝트 생성&lt;/h4&gt;
+
+&lt;h5 id=&quot;maven에-대한-이해&quot;&gt;Maven에 대한 이해&lt;/h5&gt;
+
+&lt;p&gt;https://www.slideshare.net/sunnykwak90/ss-43767933&lt;/p&gt;
+
+&lt;h5 id=&quot;이클립스-실행&quot;&gt;이클립스 실행&lt;/h5&gt;
+
+&lt;p&gt;파일 (탐색기)를 이용해서 eclipse 폴더의 eclipse 파일을 더블 클릭해서 실행&lt;/p&gt;
+
+&lt;h5 id=&quot;maven-project-생성&quot;&gt;Maven Project 생성&lt;/h5&gt;
+
+&lt;p&gt;File -&amp;gt; New -&amp;gt; Project -&amp;gt; Maven -&amp;gt; Maven Project 선택&lt;/p&gt;
+
+&lt;p&gt;-&amp;gt; [Next] -&amp;gt; [Next] -&amp;gt; [Next] -&amp;gt;&lt;/p&gt;
+
+&lt;p&gt;Group Id : kr.co.mycompant.hd&lt;/p&gt;
+
+&lt;p&gt;Artifact Id : wcount&lt;/p&gt;
+
+&lt;p&gt;-&amp;gt; [Finish]&lt;/p&gt;
+
+&lt;h5 id=&quot;pomxml-수정해서-하둡-jar-파일-설정&quot;&gt;pom.xml 수정해서 하둡 jar 파일 설정&lt;/h5&gt;
+
+&lt;p&gt;pom.xml 을 열어서 &lt;dependencies&gt; 와 &lt;/dependencies&gt; 사이에 아래 내용을 입력&lt;/p&gt;
+
+&lt;p&gt;의미 : 하둡 1.2.1 관련된 jar 파일들을 자동으로 다운로드해서 환경 설정&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
+  &amp;lt;groupId&amp;gt;org.apache.hadoop&amp;lt;/groupId&amp;gt;
+  &amp;lt;artifactId&amp;gt;hadoop-core&amp;lt;/artifactId&amp;gt;
+  &amp;lt;version&amp;gt;1.2.1&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/_site/img/post/2018/Programming/Hadoop_pom_xml.png?raw=true&quot; alt=&quot;Hadoop_pom_xml&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;wordcount-예제-코딩&quot;&gt;WordCount 예제 코딩&lt;/h3&gt;
+
+&lt;h4 id=&quot;wordcount-클래스-생성&quot;&gt;WordCount 클래스 생성&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/_site/img/post/2018/Programming/Hadoop_wordcount_class.png?raw=true&quot; alt=&quot;Hadoop_class&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;sr/main/java 밑의 kr.co.mycompany.hd.wcount 에서&lt;/p&gt;
+
+&lt;p&gt;우클릭해서 -&amp;gt; New -&amp;gt; Class : WordCount -&amp;gt; [Finish]&lt;/p&gt;
+
+&lt;p&gt;아래 소스를 입력&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;package kr.co.mycompany.hd.wcount;
+import java.io.IOException;
+import java.util.StringTokenizer;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+
+public class WordCount {
+  public static class MyMapper
+    extends Mapper&amp;lt;LongWritable, Text, Text, LongWritable&amp;gt; {
+    private final static LongWritable one = new LongWritable(1);
+    private Text word = new Text();
+    @Override
+    public void map(LongWritable key, Text value, Context context)
+        throws IOException, InterruptedException {
+      String line = value.toString();
+      StringTokenizer tokenizer =
+        new StringTokenizer(line, &quot;\t\r\n\f|,.()&amp;lt;&amp;gt; &quot;);
+      while(tokenizer.hasMoreTokens()) {
+        word.set(tokenizer.nextToken().toLowerCase());
+        context.write(word, one);
+      }
+    }// map
+  }// MyMapper
+  public static class MyReducer
+    extends Reducer&amp;lt;Text, LongWritable, Text, LongWritable&amp;gt; {
+    private LongWritable sumWritable = new LongWritable();
+    @Override
+    protected void reduce(Text key, Iterable&amp;lt;LongWritable&amp;gt; values,
+        Context context)
+        throws IOException, InterruptedException {
+      long sum = 0;
+      for(LongWritable val : values) {
+        sum += val.get();
+      }
+      sumWritable.set(sum);
+      context.write(key, sumWritable);
+    }// reduce
+  }// MyReducer
+  public static void main(String[] args) throws Exception {
+    Configuration conf = new Configuration();
+    Job job = new Job(conf, &quot;WordCount&quot;);
+
+    job.setJarByClass(WordCount.class);
+    job.setMapperClass(MyMapper.class);
+    job.setReducerClass(MyReducer.class);
+
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(LongWritable.class);
+
+    job.setInputFormatClass(TextInputFormat.class);
+    job.setOutputFormatClass(TextOutputFormat.class);
+
+    FileInputFormat.addInputPath(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+    job.waitForCompletion(true);
+  }// main
+}// end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&quot;코드-설명&quot;&gt;코드 설명&lt;/h5&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/_site/img/post/2018/Programming/WordcountExample.png?raw=true&quot; alt=&quot;WordcountExample&quot; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;package kr.co.mycompany.hd.wcount;
+
+public class WordCount {
+  public static class MyMapper
+    extends Mapper&amp;lt;LongWritable, Text, Text, LongWritable&amp;gt; {
+    // Mapper를 상속받음 &amp;lt;KEYIN, VALUEIN, KEYOUT, VALUEOUT&amp;gt;
+    
+    private final static LongWritable one = new LongWritable(1);
+    // final로 정의(상수). 공유하기 위해 static. 1을 담음. 어떤 단어가 한 번 나올 때 1이 들어가는 용도
+    
+    private Text word = new Text();
+    // 단어 담는 용도. 이 위치에서 생성하는 게 성능 향상에 도움이 됨. 
+    // Map에 생성되면 갯수만큼 호출되므로 매번 객체생성. Map에서는 객체 생성 안함. Map 들어가기 전에 생성.
+    
+    @Override  
+    public void map(LongWritable key, Text value, Context context)
+    // Text value : 텍스트가 한 줄씩 들어옴
+    // Context : 나와 하둡의 연결고리
+    
+        throws IOException, InterruptedException {
+      String line = value.toString();
+      // String으로 바꿔야 자바에서 자료 관리가 가능하므로 변경
+      // toStirng : String으로 바꿔줌
+      
+      StringTokenizer tokenizer = new StringTokenizer(line, &quot;\t\r\n\f|,.()&amp;lt;&amp;gt; &quot;);
+      // StringTokenizer&amp;lt;String, 구분자&amp;gt;, 구분자 맨 뒤에 공백 있음.
+      // Dear Bear River
+      
+      while(tokenizer.hasMoreTokens()) {
+        word.set(tokenizer.nextToken().toLowerCase());
+        context.write(word, one);
+      // hasMoreTokens() : 반복문 돌면서 'hello hadoop world'
+      // -&amp;gt; 3개로 끊어짐. 'hello', 'hadoo', 'world'
+          
+      // word.set : 하나씩 담음
+      // nextToken : 다음 토큰 가져옴
+      // toLowerCase : 대소문자 구분 안하기 위해 모두 소문자로 변경
+      
+      // context.write(word, one) : 단어 기록. (ex) 'hello'가 1번 나왔다 : ('hello', 1)
+          // 첫번째 루프 : Deer, 1 / 두번째 루프 : Bear, 1 / 세번째 루프 : River 1
+      }
+    }// map
+  }// MyMapper
+  
+  
+  // Reducer
+  public static class MyReducer
+    extends Reducer&amp;lt;Text, LongWritable, Text, LongWritable&amp;gt; {
+    // Reducer &amp;lt;KEYIN, VALUEIN, KEYOUT, VALUEOUT&amp;gt;  
+      
+    private LongWritable sumWritable = new LongWritable();
+    
+    @Override
+    protected void reduce(Text key, Iterable&amp;lt;LongWritable&amp;gt; values,
+        Context context)
+    // Iterable : 반복자
+        
+        throws IOException, InterruptedException {
+      long sum = 0;
+      for(LongWritable val : values) {
+        sum += val.get();
+      }
+      // 반복문 돌면서 LongWritable로 하나씩 가져온다.
+      // 배열로 두개가 들어온다고 생각(그림의 Shuffling 부분 참고). (ex) Bear[1, 1]
+      
+      sumWritable.set(sum);
+      // 더해 줌
+        
+      context.write(key, sumWritable);       
+    }// reduce
+  }// MyReducer
+    
+ 
+  // Main method
+  public static void main(String[] args) throws Exception {
+    Configuration conf = new Configuration();
+    // Configuration : 환경설정
+   
+    Job job = new Job(conf, &quot;WordCount&quot;);
+    // Job : MapReduce의 Job
+
+    job.setJarByClass(WordCount.class);
+    job.setMapperClass(MyMapper.class);
+    job.setReducerClass(MyReducer.class);
+
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(LongWritable.class);
+
+    job.setInputFormatClass(TextInputFormat.class);
+    job.setOutputFormatClass(TextOutputFormat.class);
+
+    FileInputFormat.addInputPath(job, new Path(args[0]));  // 입력폴더
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));  // 출력폴더
+
+    job.waitForCompletion(true);
+  }
+}// end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;예제를-maven-install-로-jar-파일로-패키징한다&quot;&gt;예제를 Maven Install 로 ~.jar 파일로 패키징한다.&lt;/h4&gt;
+
+&lt;p&gt;프로젝트 우클릭 -&amp;gt; Run As -&amp;gt; 8 Maven install&lt;/p&gt;
+
+&lt;p&gt;target 폴더에 wcount-0.0.1-SNAPSHOT.jar 이 생성된다.&lt;/p&gt;
+
+&lt;h3 id=&quot;하둡-가상-분산-모드에서-생성된-jar-을-사용하여-wordcount-실행-테스트&quot;&gt;하둡 가상 분산 모드에서 생성된 jar 을 사용하여 WordCount 실행, 테스트&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;wcount-0.0.1-SNAPSHOT.jar 파일을 /home/유저명/hadoop-1.2.1 폴더에 복사한다.&lt;/li&gt;
+  &lt;li&gt;hadoop fs 명령을 사용하여 테스트할 파일을 복사한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ hadoop fs -put READEME.txt .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;hadoop-jar-명령을-사용하여-예제를-실행테스트한다&quot;&gt;hadoop jar 명령을 사용하여 예제를 실행/테스트한다.&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ hadoop jar wcount-0.0.1-SNAPSHOT.jar kr.co.mycompany.hd.wcount.WordCount README.txt output1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;결과가-output1-폴더에-part-r-00000-이라는-파일로-저장된다&quot;&gt;결과가 output1 폴더에 part-r-00000 이라는 파일로 저장된다.&lt;/h4&gt;
+
+&lt;p&gt;hadoop fs -cat 명령어를 통해서 학인 할 수 있다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ hadoop fs -cat output1/part-r-00000
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;wc--wordcount-명령어&quot;&gt;wc : wordcount 명령어&lt;/h4&gt;
+
+&lt;p&gt;단어수 31,  줄 179, 크기 1366&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/lovesignal/lovesignal.github.io/blob/master/_site/img/post/2018/Programming/linux.png?raw=true&quot; alt=&quot;linux&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;[참고문헌]&lt;/p&gt;
+
+&lt;p&gt;https://blog.naver.com/sungback/220381870733&lt;/p&gt;
+
+&lt;p&gt;https://www.slideshare.net/sunnykwak90/ss-43767933&lt;/p&gt;
+
+&lt;p&gt;http://naver.me/IDMfcGl3&lt;/p&gt;
+
+&lt;p&gt;https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html&lt;/p&gt;</content><author><name>Jane</name></author><summary type="html">Hadoop 설치부터 WordCount 예제까지 실습</summary></entry><entry><title type="html">7. Reverse Integer</title><link href="http://localhost:4000/algorithms/2018/02/21/Leetcode_7_Reverse_Integer/" rel="alternate" type="text/html" title="7. Reverse Integer" /><published>2018-02-21T00:00:00+09:00</published><updated>2018-02-21T00:00:00+09:00</updated><id>http://localhost:4000/algorithms/2018/02/21/Leetcode_7_Reverse_Integer</id><content type="html" xml:base="http://localhost:4000/algorithms/2018/02/21/Leetcode_7_Reverse_Integer/">&lt;h1 id=&quot;leetcode-7-reverse-integer&quot;&gt;[LeetCode] 7. Reverse Integer&lt;/h1&gt;
+
+&lt;p&gt;https://leetcode.com/problems/two-sum/description/&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Given a 32-bit signed integer, reverse digits of an integer.&lt;/p&gt;
+
+  &lt;p&gt;주어진 32비트의 부호있는 정수의 자릿 수를 뒤집는 문제.&lt;/p&gt;
+
+  &lt;p&gt;&lt;strong&gt;Example 1:&lt;/strong&gt;&lt;/p&gt;
+
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 123
+Output:  321
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;  &lt;/div&gt;
+
+  &lt;p&gt;&lt;strong&gt;Example 2:&lt;/strong&gt;&lt;/p&gt;
+
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: -123
+Output: -321
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;  &lt;/div&gt;
+
+  &lt;p&gt;&lt;strong&gt;Example 3:&lt;/strong&gt;&lt;/p&gt;
+
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 120
+Output: 21
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;  &lt;/div&gt;
+
+  &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt;
+Assume we are dealing with an environment which could only hold integers within the 32-bit signed integer range. For the purpose of this problem, assume that your function returns 0 when the reversed integer overflows.&lt;/p&gt;
+
+  &lt;p&gt;32비트의 부호 있는 정수의 범위 안에서만 정수를 저장할 수 있다고 가정한다. 반전된 정수가 오버플로우되면 함수가  0을 반환한다고 가정한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;approach&quot;&gt;Approach&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-the-flow-of-thought&quot;&gt;1. The flow of thought&lt;/h3&gt;
+
+&lt;p&gt;문제를 보고 처음 든 생각은 조건을 어떻게 처리할 것인가이다.&lt;/p&gt;
+
+&lt;p&gt;조건은 총 2가지인데, &lt;u&gt;32비트 범위&lt;/u&gt;라는 것과 &lt;u&gt;부호가 있다는 것&lt;/u&gt;이다. 둘다 따로 처리하는 게 편할 것 같아서 각각 따로 처리하는 조건문을 만들었다. (J가 부호를 따로 처리하라고 힌트를 줌)&lt;/p&gt;
+
+&lt;p&gt;1) 입력값 x의 부호가 양수인지, 음수인지 판단 &lt;code class=&quot;highlighter-rouge&quot;&gt;sign = 1 &lt;/code&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if (x&amp;lt;0): sign = -1&lt;/code&gt; &lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;2) 자릿수 뒤집는 연산 시행 &lt;code class=&quot;highlighter-rouge&quot;&gt;int(str(sign(x)*x)[::-1]&lt;/code&gt; &lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;3) 32비트 내의 정수인지 판단 &lt;code class=&quot;highlighter-rouge&quot;&gt;r &amp;gt; 2**31 -1&lt;/code&gt; &lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;2-solution&quot;&gt;2. Solution&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;reverse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;sign&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sign&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sign&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[::&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sign&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;3-another-solution&quot;&gt;3. Another solution&lt;/h3&gt;
+
+&lt;p&gt;python 솔루션 중 Vote를 가장 많이 받은 코드이다.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;reverse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cmp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`s*x`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[::&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Jane</name></author><summary type="html">LeetCode #7, Easy</summary></entry><entry><title type="html">R의 Data Structure</title><link href="http://localhost:4000/statistics/2018/02/19/Rprogramming/" rel="alternate" type="text/html" title="&lt;R&gt; R의 Data Structure" /><published>2018-02-19T00:00:00+09:00</published><updated>2018-02-19T00:00:00+09:00</updated><id>http://localhost:4000/statistics/2018/02/19/Rprogramming</id><content type="html" xml:base="http://localhost:4000/statistics/2018/02/19/Rprogramming/">&lt;h1 id=&quot;r-r의-data-structure&quot;&gt;[R] R의 Data structure&lt;/h1&gt;
+
+&lt;h2 id=&quot;데이터-구조-종류&quot;&gt;데이터 구조 종류&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Scalar&lt;/strong&gt; : element가 1개인 vector이다.&lt;/p&gt;
+
+    &lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# scalar 만들기&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'a'&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;alphabet&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'abcdefg'&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Vector&lt;/strong&gt; : 같은 종류의 element가 여러개 들어 있는 1차원 matrix이다.&lt;/p&gt;
+
+    &lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# vector 만들기&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'a'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'b'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Matrix&lt;/strong&gt; : 2차원으로 된 배열. 일반적이 표 데이터를 생각하면 된다.&lt;/p&gt;
+
+    &lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# matrix 만들기&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# 2 by 3 행렬 생성&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mat&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;a&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;b&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;c&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;d&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;e&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;f&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nrow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ncol&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mat&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;a&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;c&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;e&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;b&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;d&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;f&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Array&lt;/strong&gt; : 차원이  matrix 보다 많다. Matrix는 2차원(행, 열)인데 비해 배열은 그 이상 차원이 형성될 수 있다.&lt;/p&gt;
+
+    &lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# array 만들기&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;dog&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;cat&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;rabbit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feed&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;meat&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;fish&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;carrot&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jump&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;3&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dim&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dimnames&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'value'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'animal'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'feed'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'jump'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# array(c(vector1, vector2, vector3), dim = c(1,3,3), dimnames = list(row.names, column.names, matrix.names))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+      &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;       
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;dog&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;cat&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;rabbit&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feed&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+      &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;      &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;      &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;       
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;meat&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;fish&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;carrot&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jump&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+      &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;  
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;3&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;&lt;img src=&quot;https://lovesignal.github.io/img/post/Study/R_1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Data Frame&lt;/strong&gt; : matrix와 유사한데, 유형이 다른 데이터를 함께 넣을 수 있다.&lt;/p&gt;
+
+    &lt;div class=&quot;language-R highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;dog&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;cat&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;rabbit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feed&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;meat&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;fish&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;carrot&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jump&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;3&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dat&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dat&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;animal&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feed&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jump&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dog&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;meat&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fish&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rabbit&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;carrot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;List&lt;/strong&gt; :서열화된 성분들의 집합체이다. 예시를 보는 게 빠르다.&lt;/p&gt;
+
+    &lt;div class=&quot;language-R highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Phone Book&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Tom&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Jack&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Jean&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Mike&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phone&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;010-1234-1234&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;010-2345-5678&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;010-9876-5673&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;etc&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nrow&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mylist&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phone&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;etc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mylist&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Phone Book&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Tom&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Jack&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Jean&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Mike&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;010-1234-1234&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;010-2345-5678&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;010-9876-5673&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mylist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Phone Book&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mylist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;010-1234-1234&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;010-2345-5678&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;010-9876-5673&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mylist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Tom&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Jane</name></author><summary type="html">R의 기본적인 데이터 구조 설명</summary></entry><entry><title type="html">1. Two Sum</title><link href="http://localhost:4000/algorithms/2018/02/14/Leetcode_1_Two_Sum/" rel="alternate" type="text/html" title="1. Two Sum" /><published>2018-02-14T00:00:00+09:00</published><updated>2018-02-14T00:00:00+09:00</updated><id>http://localhost:4000/algorithms/2018/02/14/Leetcode_1_Two_Sum</id><content type="html" xml:base="http://localhost:4000/algorithms/2018/02/14/Leetcode_1_Two_Sum/">&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+
+&lt;h1 id=&quot;leetcode-1-two-sum&quot;&gt;[LeetCode] 1. Two Sum&lt;/h1&gt;
+
+&lt;p&gt;https://leetcode.com/problems/two-sum/description/&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Given an array of integers, return &lt;strong&gt;indices&lt;/strong&gt; of the two numbers such that they add up to a specific target.&lt;/p&gt;
+
+  &lt;p&gt;You may assume that each input would have &lt;strong&gt;exactly&lt;/strong&gt; one solution, and you may not use the &lt;em&gt;same&lt;/em&gt; element twice.&lt;/p&gt;
+
+  &lt;p&gt;주어진 정수 배열을 이용하여, 임의의 두 수 합계가 타겟(target) 값이 되는 두 숫자의 인덱스를 반환해라.&lt;/p&gt;
+
+  &lt;p&gt;각 입력에는 정확히 하나의 솔루션이 있다고 가정 할 수 있으며, 동일한 원소를 두 번 사용할 수 없다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Given nums = [2, 7, 11, 15], target = 9,
+Because nums[0] + nums[1] = 2 + 7 = 9,
+return [0, 1].
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;approach&quot;&gt;Approach&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-brute-force&quot;&gt;1. Brute Force&lt;/h3&gt;
+
+&lt;p&gt;CS를 전공한 친구에게 문제를 처음 접근할 때 가장 나이브한 방법으로 해 보라는 조언을 들어서 일단 brute force로 접근해보았다. index 0부터 순차적으로 더해서 target과 비교해보는 방법이다.  ` nums[0]+nums[1]==target&lt;code class=&quot;highlighter-rouge&quot;&gt;  해서 같으면 True로 두 index를 반환하고, 다르면 False이므로   &lt;/code&gt; nums[0]+nums[2]==target`  처럼 다음 index와 더한다.&lt;/p&gt;
+
+&lt;h3 id=&quot;11-complexity-analysis&quot;&gt;1.1 Complexity Analysis&lt;/h3&gt;
+
+&lt;p&gt;위 알고리즘을 짜 보면 for문이 두개 생성되어서 시간 복잡도가 $O(n^2)$ 이 된다. 각각의 for문의 시간복잡도는 $O(n)$ 이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;12-문제-쪼개기&quot;&gt;1.2 문제 쪼개기&lt;/h3&gt;
+
+&lt;p&gt;1) i 에 nums의 길이만큼 숫자 대입 &lt;code class=&quot;highlighter-rouge&quot;&gt;i in len(nums)-1&lt;/code&gt; &lt;br /&gt;
+2) 기준 숫자와 순차적으로 대입되는 숫자 더하기  &lt;code class=&quot;highlighter-rouge&quot;&gt;nums[i] + nums[j]&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;j는 1부터 len(nums)&lt;/code&gt;  &lt;br /&gt;
+3) 더한 숫자와 타겟 비교 &lt;code class=&quot;highlighter-rouge&quot;&gt;nums[i] + nums[j] == target&lt;/code&gt; &lt;br /&gt;
+4) &lt;code class=&quot;highlighter-rouge&quot;&gt;True&lt;/code&gt;일 경우 인덱스 출력 &lt;br /&gt;
+5) &lt;code class=&quot;highlighter-rouge&quot;&gt;False&lt;/code&gt;일 경우 비교대상 숫자 하나 증가 &lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;13-solution&quot;&gt;1.3 Solution&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;twoSum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;
+                
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;twoSum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;14-문제점&quot;&gt;1.4 문제점&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lovesignal.github.io/img/post/Algorithms/2018/Feb/Leetcode_1.png&quot; alt=&quot;Leetcode_1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;시간복잡도가 초과했다는 결과가 나온다. 다른 방법을 찾아보니까 Hash를 이용한 방법이 있다.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-hash&quot;&gt;2. Hash&lt;/h3&gt;
+
+&lt;p&gt;Two-pass Hash Table, One-pass Hash Table이 있다. 둘다 Solutions에 나온대로 따라해보고 익혔다.&lt;/p&gt;
+
+&lt;h3 id=&quot;21-two-pass-hash-table&quot;&gt;2.1 Two-pass Hash Table&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;(발번역이므로 참고만…)&lt;/p&gt;
+
+  &lt;p&gt;시간복잡도를 개선하기 위해서, 배열에 보수가 존재하는지 확인하기 위한 효율적인 방법이 필요하다. 보수가 존재하는 경우 해당 index를 탐색할 필요가 있다. Index에 배열의 각 element의 mapping을 유지하기 위한 가장 좋은 방법은 &lt;strong&gt;hash table&lt;/strong&gt; 이다.&lt;/p&gt;
+
+  &lt;p&gt;속도를 위해 space를 trade함으로써 O(n)에서 O(1)으로 탐색 시간을 감소 시킨다. 해시 테이블은 정확히 이 목적에 맞게 구축되었으며, 거의 일정한 시간의 빠른 탐색을 지원한다. “거의”라고 말한 이유는 충돌이 발행사면 탐색은 O(n) 시간으로 나빠질 수 있다. 하지만 hash 함수가 주의깊에 선택되기만 한다면 hash table의 탐색은  O(1)로 분할된다.&lt;/p&gt;
+
+  &lt;p&gt;심플한 구현은 두개의 반복문이 사용된다. 첫번째 반복문에는,  테이블에 각 요소의 값과 인덱스를 추가한다. 그 다음, 두 번째 반복에서 각 요소의 보수 (target - nums[i])가 테이블에 있는지 확인한다. 보수는 nums[i]가 아니어야한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;solution처음에 어려워서 stack overflow에 질문했는데 아래와 같은 답변을 받았다.&lt;/p&gt;
+
+&lt;p&gt;(stackoverflow 없었으면 CS 공부는 포기했을듯;;)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;stack overflow 질문에 달린 답변 :&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Complement&lt;/code&gt; refers to the other number that when added to the current number will give you the value of the &lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt;.&lt;/p&gt;
+
+  &lt;p&gt;If (for all) &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; + &lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt; = &lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt;, then &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;’s complement is &lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt;.&lt;/p&gt;
+
+  &lt;p&gt;In order to see if a complement of &lt;strong&gt;a number&lt;/strong&gt; is there, instead of looping through the array (which is O(n)), they are storing it (the elements in the source array) is a hash map.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;211-solution&quot;&gt;2.1.1 Solution&lt;/h3&gt;
+
+&lt;p&gt;참고하여 Discuss에 있는 코드를 공부해보았다.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;twoSum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;buff_dict&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buff_dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buff_dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;buff_dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;nums, target을 인수로 받는 함수를 정의한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;nums의 길이가 1이거나 그보다 작으면 계산할 수 없으므로 False를 반환한다.&lt;/p&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;buff_dict={}&lt;/code&gt; : buff_dict 라는 빈 딕셔너리(해시)를 생성한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;for i in range(len(nums)):&lt;/code&gt; nums의 길이만큼 for문이 loop된다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if nums[i] in buff_dict: return [buff_dict[nums[i]], i]&lt;/code&gt; :&lt;/p&gt;
+
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;nums[i]&lt;/code&gt;가 &lt;code class=&quot;highlighter-rouge&quot;&gt;buff_dict&lt;/code&gt; 안에 있는 값이면 &lt;code class=&quot;highlighter-rouge&quot;&gt;buff_dict[nums[i]]와 i&lt;/code&gt; 를 반환한다.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;else: buff_dict[target - nums[i]] = i&lt;/code&gt; :&lt;/p&gt;
+
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;nums[i]&lt;/code&gt;가 &lt;code class=&quot;highlighter-rouge&quot;&gt;buff_dict&lt;/code&gt; 안에 없는 값이면 &lt;code class=&quot;highlighter-rouge&quot;&gt;buff_dict[target - nums[i]] = i&lt;/code&gt; 를 반환한다.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;213-example&quot;&gt;2.1.3 Example&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;buff_dict&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buff_dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buff_dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;buff_dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;1) &lt;strong&gt;i = 0&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;nums[0] = 2 —&amp;gt; buff_dict 에 key 존재 안함 —&amp;gt; buff_dict[9 - 2] = buff_dict[7] = 0&lt;/p&gt;
+
+&lt;p&gt;buff_dict 이라는 딕셔너리에 key:7, value:0 이 들어가게 된다. 즉, buff_dict= {7:0}&lt;/p&gt;
+
+&lt;p&gt;2) &lt;strong&gt;i = 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;nums[1] = 11 —&amp;gt; buff_dict에 key 존재 안함 —&amp;gt; buff_dict[9 - 11] = buff_dict[-2] = 1&lt;/p&gt;
+
+&lt;p&gt;buff_dict = {7:0, -2:1}&lt;/p&gt;
+
+&lt;p&gt;3) &lt;strong&gt;i = 2&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;nums[2] = 7 —&amp;gt; buff_dict에 key = 7 존재 —&amp;gt; buff_dict[7], 2 를 반환 —&amp;gt; return(0, 2)&lt;/p&gt;
+
+&lt;p&gt;확인해보면, nums[0] = 2, nums[2] = 7 이므로 더하면 target 값 9와 같다.&lt;/p&gt;</content><author><name>Jane</name></author><summary type="html">LeetCode #1, Easy</summary></entry><entry><title type="html">(작성 중…) 딥러닝 CNN 모델을 이용한 고양이 자두의 통조림 요청 울음소리인식</title><link href="http://localhost:4000/projects/2017/10/31/project-cnn/" rel="alternate" type="text/html" title="(작성 중...) 딥러닝 CNN 모델을 이용한 고양이 자두의 통조림 요청 울음소리인식" /><published>2017-10-31T08:37:00+09:00</published><updated>2017-10-31T08:37:00+09:00</updated><id>http://localhost:4000/projects/2017/10/31/project-cnn</id><content type="html" xml:base="http://localhost:4000/projects/2017/10/31/project-cnn/">&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+
+&lt;h2 id=&quot;목차&quot;&gt;목차&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;서론&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;1.1 문제해결의 배경 및 목적&lt;/p&gt;
+
+&lt;p&gt;1.2. 문제해결의 과정 및 구성&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;본론&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;2.1 데이터 수집, 전처리 및 적용이론 고찰&lt;/p&gt;
+
+&lt;p&gt;2.2 MFCC 알고리즘 및 CNN 적용&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;결론 및 향후 과제&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;참고문헌&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;1-서론&quot;&gt;1. 서론&lt;/h3&gt;
+
+&lt;h4 id=&quot;11-문제-해결의-배경-및-목적&quot;&gt;1.1 문제 해결의 배경 및 목적&lt;/h4&gt;
+
+&lt;p&gt; 필자는 죽어가던 새끼 고양이를 아파트 단지에서 우연히 구조 후, 치료해주다가 입양까지 하게 되었다. 오전에는 거의 필자의 어머니와 고양이가 단 둘이 지내게 되었다. 개만 20년을 키운 어머니는 고양이의 습성이나 울음소리에 대해서 전혀 알지 못했다. 고양이가 기분이 좋아서 골골거리는 소리를 듣고 놀라서 '고양이가 감기 걸려서 가래가 끓는 것 같다, 애가 고장이 났다'라며 전화를 할 정도로 고양이에 대해서 알지 못했다.&lt;/p&gt;
+
+&lt;p&gt; 자두는 사료 외에 캔을 간식으로 먹는데 캔이 먹고 싶을 때 내는 특유의 울음 소리가 있다. 어머니는 캔 달라는 울음소리와 기타 다른 울음소리를 구별하지 못했다. 그래서 캔 달라는 울음 소리에 배변을 했나, 심심한가, 졸린가, 배가 고파서 사료를 먹고 싶은가 해서 여러가지 다른 것을 해주었다.
+
+자두의 캔 달라는 의사 표시를 원활하게 전달하기 위한 장치를 모색하게 되었다. 그 해결방법으로 딥러닝과 스마트폰 앱이 결합된 생활 편의 장치를 구상하게 되었다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;12-문제-해결의-과정-및-구성&quot;&gt;1.2 문제 해결의 과정 및 구성&lt;/h4&gt;
+
+&lt;p&gt;프로젝트는 표1-1의 순서로 진행했다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;img src=&quot;https://lovesignal.github.io/img/post/2017/Oct/cnn1.png&quot; alt=&quot;표1&quot; /&gt; 표1-1 수행과정&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;데이터 준비 단계에서 데이터를 직접 녹음기로 수집 후 음성파일을 위한 전처리를 수행했다. 분석방법에 적용할 이론으로 MFCC 알고리즘과 CNN 알고리즘을 선정했다. 소리신호처리(sound processing)에서 소리(sound)를 전력 스펙트럼(power spectrum)으로 표현하는 방법을 mfcc라고 한다.  전처리를 통해 mfcc 알고리즘을 이용하여 오디오 데이터 변환 작업을 진행했다. 전처리된 데이터의 특징을 시각적으로 파악 후 CNN 알고리즘으로 자두의 울음소리를 학습시켰다. 학습된 결과를 해석 후 실생활에 적용할 계획이었다.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-본론&quot;&gt;2. 본론&lt;/h3&gt;
+
+&lt;h4 id=&quot;21-데이터-수집-전처리-및-적용이론-고찰&quot;&gt;2.1 데이터 수집, 전처리 및 적용이론 고찰&lt;/h4&gt;
+
+&lt;h4 id=&quot;211-데이터-수집&quot;&gt;2.1.1 데이터 수집&lt;/h4&gt;
+
+&lt;p&gt;데이터는 자두의 울음소리가 필요했기 때문에 자두가 캔을 달라는 울음소리를 낼 때, 기타 다른 이유로 울 때마다 필자가 직접 녹음기로 녹음했다. 총 400개의 raw data가 수집되었다. 수집된 오디오 파일은 모두 WAV 포맷으로 저장되었다. WAV 포맷을 사용하는 이유는 시간에 따른 모든 정보를 나열 했기 때문이다. 우리가 흔히 사용하는 mp3 파일은 가청 주파수 밖의 신호는 잘라내기 때문에 데이터 손실이 일어난다. 반면, WAV는 모든 정보를 가지고 있다. &lt;sup&gt;1&lt;/sup&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;212-데이터-전처리-및-적용-이론-고찰&quot;&gt;2.1.2 데이터 전처리 및 적용 이론 고찰&lt;/h4&gt;
+
+&lt;p&gt;신호(signal)는 그 의미가 매우 넓어 정의하기 어렵지만 일반적으로 측정 가능한 양을 표현하는 함수라고 할 수 있다.
+
+ 
+
+우리 주변에는 다양한 신호가 존재한다. 예를 들어 소리는 공기의 진동을 통해 전달되며, 사람은 청각 기관을 통해 이를 인지한다. 공기를 비롯한 다양한 매질은 신호 그 자체만을 전달하는 것이 아니라 필연적으로 잡음을 함께 전달하며, 이와 같은 잡음을 제어하고 신호를 구별해 내는 장치를 시스템이라 한다. 프로젝트 자두는 이 시스템을 완성하는 과정이라 할 수 있다.
+
+일반적으로 신호는 시간에 따라 그 크기가 변화하며, 이는 수학적으로 시간에 따른 함수로 표현된다. 자연계의 대부분의 신호는 모든 시점에서 신호의 크기가 존재하고, 시간에 따라 그 크기가 변화하는 연속시간 신호(continuous time signal)이다.
+
+ 이와 달리 이산적으로 존재하는, 즉 일정 시점에만 존재하는 신호를 이산시간 신호(discrete time signal)라 한다.
+
+ 우리가 사용하는 디지털 컴퓨터는 연속시간 신호는 다룰 수 없으며, 이산시간 신호의 처리만이 가능하다. 따라서 자연계에 존재하는 연속시간 신호를 이산시간 신호로 변환할 필요가 있다. 이를 위해 일정한 시간 간격 $T_s$ 마다 연속시간 신호 $x(t)$의 값을 가져와 이산시간 신호 $x[n]$을 만드는 과정을 샘플링(sampling)이라고 한다. 
+
+&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;</content><author><name>Jane</name></author><summary type="html">CNN 알고리즘을 이용하여 고양이 통조림 요청 울음소리를 식별한 프로젝트</summary></entry></feed>
