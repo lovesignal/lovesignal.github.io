@@ -1,11 +1,9 @@
 ---
-layout: "post"
 date:   2017-10-30 23:37:00
-title: (작성 중...) 딥러닝 CNN 모델을 이용한 고양이 자두의 통조림 요청 울음소리인식
+title: "[Project] (작성 중...) 딥러닝 CNN 모델을 이용한 고양이 자두의 통조림 요청 울음소리인식"
 categories: projects
 excerpt: "CNN 알고리즘을 이용하여 고양이 통조림 요청 울음소리를 식별한 프로젝트"
 comments: true
-use_math : true
 ---
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>

@@ -1,7 +1,6 @@
 ---
-layout: "post"
 date: 2018-02-21
-title: 7. Reverse Integer
+title: "[Algorithms] 7. Reverse Integer"
 excerpt: "LeetCode #7, Easy"
 categories: algorithms
 comments: true
