@@ -18,7 +18,7 @@ comments: true
 
 ## Function Concept 1
 
-###Function 함수
+### Function 함수
 
 어떤 일을 수행하는 코드 덩어리
 
@@ -29,6 +29,8 @@ comments: true
 
 
 - 캡슐화 : 인터페이스만 알면 타인의 코드 사용 
+
+<br>
 
 ### 함수 선언 문법
 
@@ -47,7 +49,7 @@ print("사각형 y의 길이: ", rectangle_y)
 print("사각형의 넓이: ", calculate_rectangle_area(rectangle_x, rectangle_y))
 ```
 
-
+<br>
 
 ### Parameter vs. Argument
 
@@ -64,7 +66,7 @@ def f(x):
 print(f(2))
 ```
 
-
+<br>
 
 ### 함수 형태
 
@@ -87,7 +89,7 @@ print(list_test.sort())
 
 None 출력 됨. 왜냐하면 sort()는 return값이 없는 함수이므로.
 
-
+<br>
 
 * sort(), sorted() 차이
 
@@ -108,7 +110,7 @@ def dRectangleArea(x, y):   # 인자 o, 리턴 값 o
   return(x * y)
 ```
 
-
+<br><br>
 
 ## Function Concept 2
 
@@ -128,7 +130,7 @@ def dRectangleArea(x, y):   # 인자 o, 리턴 값 o
 
 함수 내에 인자 값 변경 시, 호출자의 값도 변경 됨.
 
-
+<br>
 
 #### 파이썬 함수 호출 방식
 
@@ -146,9 +148,7 @@ spam(ham)
 print(ham)   # [0, 1]
 ```
 
-![스크린샷 2018-01-05 오후 5.36.06](/Users/jane/Pictures/스크린샷 2018-01-05 오후 5.36.06.png)
-
-
+<br>
 
 ### 변수의 범위 (Scoping Rule)
 
@@ -177,7 +177,7 @@ print("After Calculation")
 print("Total : ", str(total), "Sum:", str(sum)) # 지역변수는 전역변수에 영향x
 ```
 
-
+<br>
 
 ### Swap
 
@@ -185,7 +185,7 @@ print("Total : ", str(total), "Sum:", str(sum)) # 지역변수는 전역변수�
 
 Call by XXXX를 설명하기 위한 전통적인 함수 예시
 
-
+<br>
 
 **a = [1, 2, 3, 4, 5] 일 때 아래 함수 중 실제 swap이 일어나는 함수는?**
 
@@ -208,7 +208,7 @@ def swap_reference(list, offset_x, offset_y):
   list[offset_y] = temp
 ```
 
-
+<br>
 
 **swap_offset : a 리스트의 전역 변수 값을 직접 변경**
 
@@ -227,7 +227,7 @@ swap_reference(a, 1, 2)
 print(a)     # [1, 3, 2, 4, 5]
 ```
 
-
+<br>
 
 ### 재귀함수 Recursive Function
 
@@ -246,7 +246,7 @@ def factorial(n):
 print(factorial)
 ```
 
-
+<br>
 
 ## Function arguments
 
@@ -260,6 +260,8 @@ print(factorial)
 
 3) Variable-length asterisk (가변인자)
 
+<br>
+
 #### Keyword arguments
 
 함수에 입력되는 parameter의 변수명을 사용, arguments를 넘김.
@@ -272,7 +274,7 @@ print_something("Jane", "John")
 print_something(your_name = "Jane", my_name = "John")
 ```
 
-
+<br>
 
 #### Default arguments
 
@@ -286,7 +288,7 @@ print_something("Jane", "John")
 print_something("Jane")
 ```
 
-
+<br>
 
 #### Variable-length asterisk
 
@@ -322,7 +324,7 @@ def asterisk_test2(*args):
 print(asterisk_test2(3,4,5,10,11,12))
 ```
 
-
+<br>
 
 #### Keyword variable-length 키워드 가변인자
 
@@ -352,7 +354,7 @@ def kwargs_test2(**kwargs):
 kwargs_test2(first=3, second=4, third=5)
 ```
 
-
+<br>
 
 ## Cording Convention and Function
 
@@ -370,9 +372,9 @@ PEP8 - 파이썬 코딩 컨벤션의 기준
 
 flake8 모듈로 체크 : conda install flake8
 
+<br>
 
-
-
+<br>
 
 # Chapter 6. String
 
@@ -387,7 +389,7 @@ flake8 모듈로 체크 : conda install flake8
 >>> print(sys.getsizeof("a")	# a의 메모리 사이즈 출력
 ```
 
-
+<br>
 
 ### 1 byte의 메모리 공간
 
@@ -395,7 +397,7 @@ flake8 모듈로 체크 : conda install flake8
 
 1 byte = 8 bit = 2^8 = 256 까지 저장 가능
 
-
+<br>
 
 ## 문자열 특징
 
@@ -415,17 +417,9 @@ print(a[0], a[4])	# a e
 print(a[-1], a[5])	# e a
 ```
 
-
+<br>
 
 ### 문자열 함수
-
-![스크린샷 2018-01-08 오후 9.34.08](/Users/jane/Pictures/스크린샷 2018-01-08 오후 9.34.08.png)
-
-
-
-![스크린샷 2018-01-08 오후 9.37.12](/Users/jane/Pictures/스크린샷 2018-01-08 오후 9.37.12.png)
-
- 
 
 ### 문자열 함수 예제
 
@@ -438,7 +432,7 @@ title.count("a")
 title.upper().count("a")
 ```
 
-
+<br>
 
 ### 다양한 문자열 표현
 
@@ -456,15 +450,15 @@ title.upper().count("a")
 
  2) 큰따옴표 또는 작은 따옴표 3개
 
-
+<br>
 
 ### 특수문자
 
 문자열을 표시할 때 백슬래시 \ 를 사용하여 키보드로 표시하기 어려운 문자 표현
 
-![스크린샷 2018-01-08 오후 9.44.33](/Users/jane/Pictures/스크린샷 2018-01-08 오후 9.44.33.png)
+<br>
 
-
+<br>
 
 ## Lab : Yesterday Counter String
 
@@ -489,7 +483,7 @@ n_of_yesterday = yesterday_lyric.upper().count("YESTERDAY")
 print("Number of a Word 'Yesterday'", n_of_yesterday)
 ```
 
-
+<br>
 
 ## Lab : Yesterday Counter 2
 
@@ -500,9 +494,9 @@ n_title_of_yesterday = yesterday_lyric.count("Yesterday")
 n_lower_of_yesterday = yesterday_lyric.count("yesterday")
 ```
 
+<br>
 
-
-
+<br>
 
 # Chapter 7. Data Structure
 
@@ -522,11 +516,8 @@ n_lower_of_yesterday = yesterday_lyric.count("yesterday")
 
 - Data의 입력을 Push, 출력을 Pop이라고 함
 
-  ​
 
-![스크린샷 2018-01-09 오후 1.00.33](/Users/jane/Pictures/스크린샷 2018-01-09 오후 1.00.33.png)
-
-
+<br>
 
 #### Stack in python
 
@@ -543,7 +534,7 @@ a.pop()		# 20 출력
 a.pop()		# 10 출력
 ```
 
-
+<br>
 
 #### Stack Example
 
@@ -561,16 +552,14 @@ for _ in range(len(word_list)):		# _ : 사용하지 않는 것 표시
 print(word[::-1])
 ```
 
-
+<br>
 
 ### Queue
 
 * 먼저 넣은 데이터를 먼저 반환하도록 설계된 메모리 구조로 First In First Out으로 구현 됨
 * Stack과 반대되는 개념
 
-![스크린샷 2018-01-09 오후 1.13.16](/Users/jane/Pictures/스크린샷 2018-01-09 오후 1.13.16.png)
-
-
+<br>
 
 #### Que in python
 
@@ -586,7 +575,7 @@ a.pop(0)	# 1 출력
 a.pop(0)	# 2 출력
 ```
 
-
+<br>
 
 ## Tuple & Set 
 
@@ -609,7 +598,7 @@ t = (1, )  # 값이 하나인 Tuple은 반드시 ","를 붙여야 함 (1,)
 
 프로그램을 작동하는 동안 변경되지 않은 데이터의 저장 (ex) 학번, 이름, 우편번호 등
 
-
+<br>
 
 ### Set
 
@@ -640,7 +629,7 @@ s1.difference(s2)      # {1, 2}
 s1 - s2                # {1, 2}
 ```
 
-
+<br>
 
 ## Dictionary
 
@@ -666,7 +655,7 @@ sudent_info[20140012]
 student_info[2014003] = 'Wonchul'
 ```
 
-
+<br>
 
 ### Dictionary Handling
 
@@ -709,7 +698,7 @@ True
 True
 ```
 
-
+<br>
 
 ## Lab : Command Counter
 
@@ -765,7 +754,7 @@ form collections import OrderedDict
 form collections import namedtuple
 ```
 
-
+<br>
 
 ### deque
 
@@ -785,7 +774,7 @@ dequeList.appendleft(10)
 print(dequeList)
 ```
 
-
+<br>
 
 * rotate, reverse 등 Linked List의 특성을 지원
 * 기존 list 형태의 함수를 모두 지원
@@ -803,13 +792,13 @@ print(dequeList)
 print(deque(reversed(dequeList)))
 ```
 
-
+<br>
 
 * deque는 기존 list 보다 효율적인 자료구조 제공
 * 효율적 메로리 구조로 처리 속도 향상
 
 
-
+<br>
 
 ## Collection module 1
 
@@ -817,17 +806,10 @@ print(deque(reversed(dequeList)))
 
 * Dict와 달리, 데이터를 입력한 순서대로 dict를 반환함
 
-![스크린샷 2018-01-10 오후 4.07.31](/Users/jane/Pictures/스크린샷 2018-01-10 오후 4.07.31.png)
-
-
 
 * Dict type의 값을 value 또는 key 값으로 정렬할 때 사용 가능
 
-![스크린샷 2018-01-10 오후 4.18.32](/Users/jane/Pictures/스크린샷 2018-01-10 오후 4.18.32.png)
-
-![스크린샷 2018-01-10 오후 4.23.20](/Users/jane/Pictures/스크린샷 2018-01-10 오후 4.23.20.png)
-
-
+<br>
 
 ### defaultdict
 
@@ -840,12 +822,10 @@ d = defaultdict(lambda: 0)    # Default 값을 0으로 설정
 pirnt(d["first"])             # 0 출력
 ```
 
-
+<br>
 
 * 하나의 지문에 각 단어들이 몇 개나 있는지 세고 싶을 경우
 * text mining 접근법 : Vector Space Model
-
-![스크린샷 2018-01-10 오후 4.29.29](/Users/jane/Pictures/스크린샷 2018-01-10 오후 4.29.29.png)
 
 소문자로 만든 후, 띄어쓰기 기준으로 자름
 
@@ -873,7 +853,7 @@ for word in text:
     word_count[word] = 0
 ```
 
-
+<br>
 
 ## Collection module 3
 
@@ -889,7 +869,7 @@ c = Counter('gallahad')
 print(c)    # Counter({'a':3, 'l':2, 'g':1, 'd':1, 'h':1}) 출력
 ```
 
-
+<br>
 
 * Dict type, keyword parameter 등도 모두 처리 가능
 
@@ -908,7 +888,7 @@ print(list(c.elements()))
 
 ```
 
-
+<br>
 
 * Set의 연산들을 지원함
 
@@ -920,7 +900,7 @@ print(c)
 # Counter({'a':3, 'b':0, 'c':-3, 'd':-6})
 ```
 
-
+<br>
 
 * word counter의 기능도 손쉽게 제공
 
@@ -933,7 +913,7 @@ print(Counter(text)["a"])
 # 12
 ```
 
-
+<br>
 
 ### namedtuple
 
@@ -952,13 +932,9 @@ print(p.x + p.y)
 print(Point(x = 11, y = 22))
 ```
 
+<br>
 
-
-![스크린샷 2018-01-10 오후 5.21.47](/Users/jane/Pictures/스크린샷 2018-01-10 오후 5.21.47.png)
-
-
-
-
+<br>
 
 # Chapter 8.  Pythonic Code 1
 
@@ -981,7 +957,7 @@ example = 'cs50.gachon.edu'
 subdomain, domain, tld = example.splic(.)    # '.'을 기준으로 문자열 나누기 -> unpacking
 ```
 
-
+<br>
 
 ### Join
 
@@ -1002,9 +978,9 @@ result = '-'.joing(colors)    # 연결 시 '-'으로 연결
 print(result)    # 'red-blue-green-yellow'
 ```
 
+<br>
 
-
-
+<br>
 
 ## List Comprehension
 
@@ -1087,7 +1063,7 @@ for i in stuff :
 # ['DOG','dog',3]
 ```
 
-
+<br>
 
 ### Two dimensional & One Dimensional
 
@@ -1102,9 +1078,9 @@ result = [[i + j for i in case_1] for j in case_2]
 print(result)
 ```
 
+<br>
 
-
-
+<br>
 
 ## Enumerate & Zip
 
@@ -1132,7 +1108,7 @@ list(enumerate(mylist))    # list에 있는 index와 값을 unpacking 하여 lis
 
 ```
 
-
+<br>
 
 ### Zip
 
@@ -1155,7 +1131,7 @@ a,b,c = zip((1,2,3),(10,20,30),(100,200,300)) # 각 tuple의 같은 index 끼리
 [111,222,333]
 ```
 
-
+<br>
 
 ### Enumerate & Zip
 
@@ -1170,9 +1146,9 @@ for i,(a,b)in enumerate(zip(alist,blist)):
 2 a3 b3
 ```
 
+<br>
 
-
-
+<br>
 
 # Chapter 9. Pythonic Code 2
 
@@ -1205,19 +1181,13 @@ print((lambda x: x + 1)(5))
 
 
 
-
-
-
-
 ```python
 ex = [1, 2, 3, 4, 5]
 f = lambda x: x**2
 print(list(map(f, ex)))
-
-
 ```
 
-
+<br>
 
 ### Map & Reduce
 
@@ -1235,7 +1205,7 @@ ex의 1이 x ** 2에 대입 —> 1 출력
 
 ex의 2가 x**2에 대입 —> 4 출력 , ….
 
-
+<br>
 
 #### Map function 
 
@@ -1255,7 +1225,7 @@ list(
 )
 ```
 
-
+<br>
 
 * Python3는 iteration을 생성하는 식으로 바뀌어서 list를 붙여줘야 list 사용 가능
 
@@ -1286,7 +1256,7 @@ print(result)       # <map object at 0x10fc5103>
 print(next(result)) # 1
 ```
 
-
+<br>
 
 #### Reduce function
 
@@ -1304,7 +1274,7 @@ print(reduce(lambda x, y: x + y, [1, 2, 3, 4, 5]))
 
 Lambda, map, reduce는 간단한 코드로 다양한 기능을 제공한다. 그러나 **코드의 직관성이 떨어져서** python3에서는 사용을 권장하지 않는다. Legacy library나 다양한 머신러닝 코드에서 여전히 사용중이긴 하다.
 
-
+<br>
 
 ## Asterisk
 
@@ -1325,7 +1295,7 @@ asterisk_test(1, 2, 3, 4, 5, 6)
 <class 'tuple'>
 ```
 
-
+<br>
 
 ##### **kargs
 
@@ -1341,7 +1311,7 @@ asterisk_test(1, b=2, c=3, d=4, e=5, f=6)
 <class 'dict'>
 ```
 
-
+<br>
 
 #### Asterisk : unpacking a container
 
@@ -1370,7 +1340,7 @@ asterisk_test(1, (2, 3, 4, 5, 6))
 # -------------------------------------
 ```
 
-
+<br>
 
 ```python
 a, b, c = ([1, 2], [3, 4], [5, 6])
@@ -1401,9 +1371,9 @@ for data in zip(*([1,2], [3, 4], [5, 6])):
 # -------------------------------------
 ```
 
+<br>
 
-
-
+<br>
 
 ## Lab : Simple Linear algebra codes
 
@@ -1443,7 +1413,7 @@ print(result)
 # 출력 결과 : [7, 10]
 ```
 
-
+<br>
 
 #### Vector의 계산 : Scalar-Vector product
 
@@ -1456,7 +1426,7 @@ result = [alpha * sum(t) for t in zip(u, v)]
 print(result)
 ```
 
-
+<br>
 
 #### Matrix representation of python
 
@@ -1498,7 +1468,7 @@ print(result)
 
 를 출력해보면 `[[(3, 5), (6, 8)], [(4, 6), (5, 7)]]` 로 unpacking된 것을 확인할 수 있다. ( *t에 `[([3, 6], [5, 8]), ([4, 5], [6, 7])]`이 unpacking 되면서 들어간 것)
 
-
+<br>
 
 #### Matrix 계산 : Scala-Matrix Product
 
@@ -1508,7 +1478,7 @@ alpha = 4
 result = [[alpha * element for element in t] for t in mat_a]
 ```
 
-
+<br>
 
 #### Matrix 계산 : Matrix Transpose
 
@@ -1520,7 +1490,7 @@ print(result)    # [[1, 4], [2, 5], [3, 6]]
 
 `[t for t in zip(*mat_a)]` 출력해보면 `[(1, 4), (2, 5), (3, 6)]`
 
-
+<br>
 
 #### Matrix 계산 : Matrix Product
 
@@ -1532,7 +1502,7 @@ result = [[sum(a * b for a, b in zip(row_a, column_b))
 print(result)	# [[5, 8], [5, 6] ]
 ```
 
-
+<br>
 
 ### 두 개 이상의 Argument가 존재할 때는?
 
@@ -1542,3 +1512,4 @@ def vector_addtion(*args):
 
 vector_addtion([1, 2], [2, 3], [3, 4])
 ```
+
