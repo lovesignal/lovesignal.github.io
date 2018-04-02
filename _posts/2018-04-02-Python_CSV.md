@@ -1,5 +1,5 @@
 ---
-date: 2018-03-01
+date: 2018-04-02
 title: "[Programming] Python에서 CSV 파일을 읽어들이는 여러가지 방법"
 excerpt: "Python에서 CSV 파일을 읽어들이는 여러가지 방법을 간결하게 정리"
 categories: programming
@@ -7,8 +7,6 @@ comments: true
 ---
 
 
-
-# Python에서 CSV 파일을 읽어들이는 여러가지 방법
 
 ## 방법1. 기본 내장함수 사용
 
