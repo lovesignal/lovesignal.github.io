@@ -5,7 +5,7 @@ title: "[R] R의 Data Structure"
 excerpt: "R의 기본적인 데이터 구조 설명"
 categories: Statistics
 comments: true
-tags: [CNN, Deep Learning, speech recognition, signal processing]
+tags: [R, data structure]
 comments: true
 ---
 
