@@ -1,12 +1,13 @@
 ---
 layout: post
-title: "[Project] (작성 중...) 딥러닝 CNN 모델을 이용한 고양이 자두의 통조림 요청 울음소리인식"
-tags: [CNN, Deep Learning, speech recognition, signal processing]
-comments: true
+title: [Project] (작성 중...) 딥러닝 CNN 모델을 이용한 고양이 자두의 통조림 요청 울음소리인식
+img:"https://raw.githubusercontent.com/lovesignal/lovesignal.github.io/master/img/post/Projects/2017/Oct/cnn10.png"
+date: April, 08 2017
+tags: [CNN, Deep Learning, speech recognition, signal processing, project]
 ---
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+![image]({{ site.baseurl }}/{{ page.img }})
 
 ## 목차
 
