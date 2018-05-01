@@ -1,9 +1,11 @@
 ---
+layout : post 
 date: 2018-02-21
 title: "[Algorithms] 7. Reverse Integer"
 excerpt: "LeetCode #7, Easy"
 categories: algorithms
 comments: true
+tag : [algorithms]
 ---
 
 

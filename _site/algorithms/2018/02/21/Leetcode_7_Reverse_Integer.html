@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- JQuery (used for bootstrap and jekyll search) -->
+    <script src="/assets/js/jquery-3.2.1.min.js" ></script>
+    
+    <!-- Main JS (navbar.js and katex_init.js)-->
+    <script defer=true src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="http://localhost:4000/algorithms/2018/02/21/Leetcode_7_Reverse_Integer.html">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="Signal" href="http://localhost:4000///feed.xml"/>
+
+    <!-- Font Awesome -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css"> 
+    
+
+    <!-- KaTeX 0.8.3 -->
+    
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/katex.min.css">
+    <script src="/assets/js/katex.min.js">
+    </script>
+    
+
+    <!-- Google Analytics -->
+    
+    
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>[Algorithms] 7. Reverse Integer | Signal</title>
+<meta name="generator" content="Jekyll v3.8.0" />
+<meta property="og:title" content="[Algorithms] 7. Reverse Integer" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="LeetCode #7, Easy" />
+<meta property="og:description" content="LeetCode #7, Easy" />
+<link rel="canonical" href="http://localhost:4000/algorithms/2018/02/21/Leetcode_7_Reverse_Integer.html" />
+<meta property="og:url" content="http://localhost:4000/algorithms/2018/02/21/Leetcode_7_Reverse_Integer.html" />
+<meta property="og:site_name" content="Signal" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-02-21T00:00:00+09:00" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/algorithms/2018/02/21/Leetcode_7_Reverse_Integer.html","headline":"[Algorithms] 7. Reverse Integer","dateModified":"2018-02-21T00:00:00+09:00","datePublished":"2018-02-21T00:00:00+09:00","description":"LeetCode #7, Easy","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algorithms/2018/02/21/Leetcode_7_Reverse_Integer.html"},"@type":"BlogPosting","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- Manual seo tags -->
+    <!--
+    <title>[Algorithms] 7. Reverse Integer | Signal</title>
+    <meta name="description" content="LeetCode #7, Easy">
+    -->
+</head>
+
+  <body>
+    <header class="site-header">
+    
+    <!-- Logo and title -->
+	<div class="branding">
+		<a href="/">
+			<img class="avatar" src="/assets/img/triangle.svg" alt=""/>
+		</a>
+
+		<h1 class="site-title">
+			<a href="/">Signal</a>
+		</h1>
+	</div>
+    
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+    
+    <!-- Menu -->
+    <ul>
+        
+        
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/about/">
+                About
+            </a>
+        </li>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/portfolio">
+                Portfolio
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/tags">
+                <i class="fa fa-tags" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+    </ul>
+        
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+
+  <header id="main" style="background-image: url('/')">
+    <h1 id="%5BAlgorithms%5D+7.+Reverse+Integer" class="title">[Algorithms] 7. Reverse Integer</h1>
+    <p class="meta">
+    February 21, 2018
+    
+    </p>
+  </header>
+  <section class="post-content"><h1 id="leetcode-7-reverse-integer">[LeetCode] 7. Reverse Integer</h1>
+
+<p>https://leetcode.com/problems/two-sum/description/</p>
+
+<blockquote>
+  <p>Given a 32-bit signed integer, reverse digits of an integer.</p>
+
+  <p>주어진 32비트의 부호있는 정수의 자릿 수를 뒤집는 문제.</p>
+
+  <p><strong>Example 1:</strong></p>
+
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: 123
+Output:  321
+
+</code></pre></div>  </div>
+
+  <p><strong>Example 2:</strong></p>
+
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: -123
+Output: -321
+
+</code></pre></div>  </div>
+
+  <p><strong>Example 3:</strong></p>
+
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: 120
+Output: 21
+
+</code></pre></div>  </div>
+
+  <p><strong>Note:</strong>
+Assume we are dealing with an environment which could only hold integers within the 32-bit signed integer range. For the purpose of this problem, assume that your function returns 0 when the reversed integer overflows.</p>
+
+  <p>32비트의 부호 있는 정수의 범위 안에서만 정수를 저장할 수 있다고 가정한다. 반전된 정수가 오버플로우되면 함수가  0을 반환한다고 가정한다.</p>
+</blockquote>
+
+<p><br />
+<br /></p>
+
+<h2 id="approach">Approach</h2>
+
+<h3 id="1-the-flow-of-thought">1. The flow of thought</h3>
+
+<p>문제를 보고 처음 든 생각은 조건을 어떻게 처리할 것인가이다.</p>
+
+<p>조건은 총 2가지인데, <u>32비트 범위</u>라는 것과 <u>부호가 있다는 것</u>이다. 둘다 따로 처리하는 게 편할 것 같아서 각각 따로 처리하는 조건문을 만들었다. (J가 부호를 따로 처리하라고 힌트를 줌)</p>
+
+<p>1) 입력값 x의 부호가 양수인지, 음수인지 판단 <code class="highlighter-rouge">sign = 1 </code><code class="highlighter-rouge">if (x&lt;0): sign = -1</code> <br /></p>
+
+<p>2) 자릿수 뒤집는 연산 시행 <code class="highlighter-rouge">int(str(sign(x)*x)[::-1]</code> <br /></p>
+
+<p>3) 32비트 내의 정수인지 판단 <code class="highlighter-rouge">r &gt; 2**31 -1</code> <br /></p>
+
+<p><br /></p>
+
+<h3 id="2-solution">2. Solution</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reverse</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sign</span><span class="o">*</span><span class="n">x</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">sign</span><span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="n">r</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="o">**</span><span class="mi">31</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h3 id="3-another-solution">3. Another solution</h3>
+
+<p>python 솔루션 중 Vote를 가장 많이 받은 코드이다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">reverse</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="sb">`s*x`</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">*</span><span class="n">r</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">**</span><span class="mi">31</span><span class="p">)</span>
+</code></pre></div></div>
+
+</section>
+   
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list">
+    
+      <div class="meta">Tags</div>
+    
+
+    
+    <a class="button" href="/tags#algorithms">
+      <p><i class="fa fa-tag fa-fw"></i> algorithms</p>
+    </a>
+    
+  </div>
+</footer>
+
+    
+</article>
+
+
+
+<!-- Disqus -->
+
+<div class="comments">
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+	var disqus_shortname = 'signal';
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view comments.</noscript>
+
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+  
+  <div id="previous-post" class="post-nav-post">
+      <p>Previous post</p>
+      <a href="/statistics/2018/02/19/Rprogramming.html">
+        [R] R의 Data Structure
+      </a>
+  </div>
+  
+  
+  <div id="next-post" class="post-nav-post">
+      <p>Next post</p>
+      <a href="/programming/2018/02/24/Hadoop_wordCount_example.html">
+        [Hadoop] Hadoop 설치 및 WordCount 예제 실습
+      </a>
+  </div>
+  
+</div>
+
+    </div>
+    
+<footer class="site-footer">
+    <p class="text"><a href="https://github.com/lovesignal">Signal</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+	<a href="http://localhost:4000/feed.xml" title="Follow RSS feed">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+<li>
+	<a href="mailto:hmtb.signal@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+	<a href="https://github.com/lovesignal" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+
+  </body>
+</html>

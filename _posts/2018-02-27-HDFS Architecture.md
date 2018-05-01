@@ -1,9 +1,11 @@
 ---
+layout : post
 date: 2018-02-27
 title: "[Hadoop] HDFS Architecture"
 excerpt: "HDFS의 기본 구조에 대해 정리"
 categories: programming
 comments: true
+tag : [hadoop, data engineering]
 ---
 
 

@@ -1,9 +1,11 @@
 ---
+layout : post
 date: 2018-02-24
 title: "[Hadoop] Hadoop 설치 및 WordCount 예제 실습"
 excerpt: "Hadoop 설치부터 WordCount 예제까지 실습"
 categories: programming
 comments: true
+tag : [hadoop, data engineering]
 ---
 
 

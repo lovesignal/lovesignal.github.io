@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- JQuery (used for bootstrap and jekyll search) -->
+    <script src="/assets/js/jquery-3.2.1.min.js" ></script>
+    
+    <!-- Main JS (navbar.js and katex_init.js)-->
+    <script defer=true src="/assets/js/main.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="http://localhost:4000/statistics/2018/02/19/Rprogramming.html">
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/atom+xml" title="Signal" href="http://localhost:4000///feed.xml"/>
+
+    <!-- Font Awesome -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css"> 
+    
+
+    <!-- KaTeX 0.8.3 -->
+    
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/katex.min.css">
+    <script src="/assets/js/katex.min.js">
+    </script>
+    
+
+    <!-- Google Analytics -->
+    
+    
+    <!-- seo tags -->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>[R] R의 Data Structure | Signal</title>
+<meta name="generator" content="Jekyll v3.8.0" />
+<meta property="og:title" content="[R] R의 Data Structure" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="R의 기본적인 데이터 구조 설명" />
+<meta property="og:description" content="R의 기본적인 데이터 구조 설명" />
+<link rel="canonical" href="http://localhost:4000/statistics/2018/02/19/Rprogramming.html" />
+<meta property="og:url" content="http://localhost:4000/statistics/2018/02/19/Rprogramming.html" />
+<meta property="og:site_name" content="Signal" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-02-19T00:00:00+09:00" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/statistics/2018/02/19/Rprogramming.html","headline":"[R] R의 Data Structure","dateModified":"2018-02-19T00:00:00+09:00","datePublished":"2018-02-19T00:00:00+09:00","description":"R의 기본적인 데이터 구조 설명","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/statistics/2018/02/19/Rprogramming.html"},"@type":"BlogPosting","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- Manual seo tags -->
+    <!--
+    <title>[R] R의 Data Structure | Signal</title>
+    <meta name="description" content="R의 기본적인 데이터 구조 설명">
+    -->
+</head>
+
+  <body>
+    <header class="site-header">
+    
+    <!-- Logo and title -->
+	<div class="branding">
+		<a href="/">
+			<img class="avatar" src="/assets/img/triangle.svg" alt=""/>
+		</a>
+
+		<h1 class="site-title">
+			<a href="/">Signal</a>
+		</h1>
+	</div>
+    
+    <!-- Toggle menu -->
+    <nav class="clear">
+    <a id="pull" class="toggle" href="#">
+    <i class="fa fa-bars fa-lg"></i>
+    </a>
+    
+    <!-- Menu -->
+    <ul>
+        
+        
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="/about/">
+                About
+            </a>
+        </li>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/portfolio">
+                Portfolio
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+        <li class="separator">
+            |
+        </li>
+        <li>
+            <a class="clear" href="http://localhost:4000/tags">
+                <i class="fa fa-tags" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+    </ul>
+        
+	</nav>
+</header>
+
+    <div class="content">
+      <article >
+
+  <header id="main" style="background-image: url('/')">
+    <h1 id="%5BR%5D+R%EC%9D%98+Data+Structure" class="title">[R] R의 Data Structure</h1>
+    <p class="meta">
+    February 19, 2018
+    
+    </p>
+  </header>
+  <section class="post-content"><h1 id="r-r의-data-structure">[R] R의 Data structure</h1>
+
+<h2 id="데이터-구조-종류">데이터 구조 종류</h2>
+
+<ul>
+  <li>
+    <p><strong>Scalar</strong> : element가 1개인 vector이다.</p>
+
+    <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># scalar 만들기</span><span class="w">
+</span><span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s1">'a'</span><span class="w">
+</span><span class="n">alphabet</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s1">'abcdefg'</span><span class="w">
+</span><span class="n">num</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></code></pre></div>    </div>
+
+    <p>​</p>
+  </li>
+  <li>
+    <p><strong>Vector</strong> : 같은 종류의 element가 여러개 들어 있는 1차원 matrix이다.</p>
+
+    <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># vector 만들기</span><span class="w">
+</span><span class="n">table</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span><span class="w"> </span><span class="s1">'b'</span><span class="p">)</span><span class="w">
+</span><span class="n">table</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">)</span><span class="w">
+</span><span class="n">bool</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
+</span></code></pre></div>    </div>
+
+    <p>​</p>
+  </li>
+  <li>
+    <p><strong>Matrix</strong> : 2차원으로 된 배열. 일반적이 표 데이터를 생각하면 된다.</p>
+
+    <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># matrix 만들기</span><span class="w">
+</span><span class="c1"># 2 by 3 행렬 생성</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s2">"a"</span><span class="p">,</span><span class="w"> </span><span class="s2">"b"</span><span class="p">,</span><span class="w"> </span><span class="s2">"c"</span><span class="p">,</span><span class="w"> </span><span class="s2">"d"</span><span class="p">,</span><span class="w"> </span><span class="s2">"e"</span><span class="p">,</span><span class="w"> </span><span class="s2">"f"</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">ncol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mat</span><span class="w">
+    </span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="p">[,</span><span class="m">3</span><span class="p">]</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">,]</span><span class="w"> </span><span class="s2">"a"</span><span class="w">  </span><span class="s2">"c"</span><span class="w">  </span><span class="s2">"e"</span><span class="w"> 
+</span><span class="p">[</span><span class="m">2</span><span class="p">,]</span><span class="w"> </span><span class="s2">"b"</span><span class="w">  </span><span class="s2">"d"</span><span class="w">  </span><span class="s2">"f"</span><span class="w"> 
+
+</span></code></pre></div>    </div>
+
+    <p>​</p>
+  </li>
+  <li>
+    <p><strong>Array</strong> : 차원이  matrix 보다 많다. Matrix는 2차원(행, 열)인데 비해 배열은 그 이상 차원이 형성될 수 있다.</p>
+
+    <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># array 만들기</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">animal</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"dog"</span><span class="p">,</span><span class="w"> </span><span class="s2">"cat"</span><span class="p">,</span><span class="w"> </span><span class="s2">"rabbit"</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">feed</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"meat"</span><span class="p">,</span><span class="w"> </span><span class="s2">"fish"</span><span class="p">,</span><span class="w"> </span><span class="s2">"carrot"</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">jump</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"3"</span><span class="p">,</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w"> </span><span class="s2">"1"</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">arr</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">animal</span><span class="p">,</span><span class="w"> </span><span class="n">feed</span><span class="p">,</span><span class="w"> </span><span class="n">jump</span><span class="p">),</span><span class="w"> </span><span class="n">dim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="n">dimnames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="s1">'value'</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'animal'</span><span class="p">,</span><span class="s1">'feed'</span><span class="p">,</span><span class="s1">'jump'</span><span class="p">)))</span><span class="w">
+
+</span><span class="c1"># array(c(vector1, vector2, vector3), dim = c(1,3,3), dimnames = list(row.names, column.names, matrix.names))</span><span class="w">
+
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">arr</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">animal</span><span class="w">
+
+      </span><span class="m">1</span><span class="w">     </span><span class="m">2</span><span class="w">     </span><span class="m">3</span><span class="w">       
+</span><span class="n">value</span><span class="w"> </span><span class="s2">"dog"</span><span class="w"> </span><span class="s2">"cat"</span><span class="w"> </span><span class="s2">"rabbit"</span><span class="w">
+
+</span><span class="p">,</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">feed</span><span class="w">
+
+      </span><span class="m">1</span><span class="w">      </span><span class="m">2</span><span class="w">      </span><span class="m">3</span><span class="w">       
+</span><span class="n">value</span><span class="w"> </span><span class="s2">"meat"</span><span class="w"> </span><span class="s2">"fish"</span><span class="w"> </span><span class="s2">"carrot"</span><span class="w">
+
+</span><span class="p">,</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">jump</span><span class="w">
+
+      </span><span class="m">1</span><span class="w">   </span><span class="m">2</span><span class="w">   </span><span class="m">3</span><span class="w">  
+</span><span class="n">value</span><span class="w"> </span><span class="s2">"3"</span><span class="w"> </span><span class="s2">"2"</span><span class="w"> </span><span class="s2">"1"</span><span class="w"> 
+
+</span></code></pre></div>    </div>
+
+    <p><img src="https://lovesignal.github.io/img/post/Study/R_1.png" alt="" /></p>
+  </li>
+  <li>
+    <p><strong>Data Frame</strong> : matrix와 유사한데, 유형이 다른 데이터를 함께 넣을 수 있다.</p>
+
+    <div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span><span class="w"> </span><span class="n">animal</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"dog"</span><span class="p">,</span><span class="w"> </span><span class="s2">"cat"</span><span class="p">,</span><span class="w"> </span><span class="s2">"rabbit"</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">feed</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"meat"</span><span class="p">,</span><span class="w"> </span><span class="s2">"fish"</span><span class="p">,</span><span class="w"> </span><span class="s2">"carrot"</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">jump</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"3"</span><span class="p">,</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w"> </span><span class="s2">"1"</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">animal</span><span class="p">,</span><span class="w"> </span><span class="n">feed</span><span class="p">,</span><span class="w"> </span><span class="n">jump</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dat</span><span class="w">
+  </span><span class="n">animal</span><span class="w">   </span><span class="n">feed</span><span class="w"> </span><span class="n">jump</span><span class="w">
+</span><span class="m">1</span><span class="w">    </span><span class="n">dog</span><span class="w">   </span><span class="n">meat</span><span class="w">    </span><span class="m">3</span><span class="w">
+</span><span class="m">2</span><span class="w">    </span><span class="n">cat</span><span class="w">   </span><span class="n">fish</span><span class="w">    </span><span class="m">2</span><span class="w">
+</span><span class="m">3</span><span class="w"> </span><span class="n">rabbit</span><span class="w"> </span><span class="n">carrot</span><span class="w">    </span><span class="m">1</span><span class="w">
+</span></code></pre></div>    </div>
+
+    <p>​</p>
+  </li>
+  <li>
+    <p><strong>List</strong> :서열화된 성분들의 집합체이다. 예시를 보는 게 빠르다.</p>
+
+    <div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Phone Book"</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Tom"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Jack"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Jean"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Mike"</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">phone</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"010-1234-1234"</span><span class="p">,</span><span class="w"> </span><span class="s2">"010-2345-5678"</span><span class="p">,</span><span class="w"> </span><span class="s2">"010-9876-5673"</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">etc</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w">
+
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mylist</span><span class="w"> </span><span class="o">&lt;-</span><span class="nf">list</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">etc</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mylist</span><span class="w">
+</span><span class="o">$</span><span class="n">title</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"Phone Book"</span><span class="w">
+
+</span><span class="o">$</span><span class="n">info</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"Tom"</span><span class="w">  </span><span class="s2">"Jack"</span><span class="w"> </span><span class="s2">"Jean"</span><span class="w"> </span><span class="s2">"Mike"</span><span class="w">
+
+</span><span class="p">[[</span><span class="m">3</span><span class="p">]]</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"010-1234-1234"</span><span class="w"> </span><span class="s2">"010-2345-5678"</span><span class="w"> </span><span class="s2">"010-9876-5673"</span><span class="w">
+
+</span><span class="p">[[</span><span class="m">4</span><span class="p">]]</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="w">
+
+</span><span class="p">[[</span><span class="m">5</span><span class="p">]]</span><span class="w">
+     </span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="p">[,</span><span class="m">3</span><span class="p">]</span><span class="w"> </span><span class="p">[,</span><span class="m">4</span><span class="p">]</span><span class="w"> </span><span class="p">[,</span><span class="m">5</span><span class="p">]</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">,]</span><span class="w">    </span><span class="m">1</span><span class="w">    </span><span class="m">3</span><span class="w">    </span><span class="m">5</span><span class="w">    </span><span class="m">7</span><span class="w">    </span><span class="m">9</span><span class="w">
+</span><span class="p">[</span><span class="m">2</span><span class="p">,]</span><span class="w">    </span><span class="m">2</span><span class="w">    </span><span class="m">4</span><span class="w">    </span><span class="m">6</span><span class="w">    </span><span class="m">8</span><span class="w">   </span><span class="m">10</span><span class="w">
+
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mylist</span><span class="o">$</span><span class="n">title</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"Phone Book"</span><span class="w">
+
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mylist</span><span class="p">[[</span><span class="m">3</span><span class="p">]]</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"010-1234-1234"</span><span class="w"> </span><span class="s2">"010-2345-5678"</span><span class="w"> </span><span class="s2">"010-9876-5673"</span><span class="w">
+
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mylist</span><span class="o">$</span><span class="n">info</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="s2">"Tom"</span><span class="w">
+</span></code></pre></div>    </div>
+
+    <p>​</p>
+  </li>
+</ul>
+
+</section>
+   
+   <!-- Tag list -->
+  
+  
+
+
+<footer>
+  <div class="tag-list">
+    
+      <div class="meta">Tags</div>
+    
+
+    
+    <a class="button" href="/tags#CNN">
+      <p><i class="fa fa-tag fa-fw"></i> CNN</p>
+    </a>
+    
+    <a class="button" href="/tags#Deep Learning">
+      <p><i class="fa fa-tag fa-fw"></i> Deep Learning</p>
+    </a>
+    
+    <a class="button" href="/tags#signal processing">
+      <p><i class="fa fa-tag fa-fw"></i> signal processing</p>
+    </a>
+    
+    <a class="button" href="/tags#speech recognition">
+      <p><i class="fa fa-tag fa-fw"></i> speech recognition</p>
+    </a>
+    
+  </div>
+</footer>
+
+    
+</article>
+
+
+
+<!-- Disqus -->
+
+<div class="comments">
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+	var disqus_shortname = 'signal';
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view comments.</noscript>
+
+</div>
+
+
+<!-- Post navigation -->
+
+  <div id="post-nav">
+  
+  <div id="previous-post" class="post-nav-post">
+      <p>Previous post</p>
+      <a href="/2018/02/14/Leetcode_1_Two_Sum.html">
+        [Algorithms] 1. Two Sum
+      </a>
+  </div>
+  
+  
+  <div id="next-post" class="post-nav-post">
+      <p>Next post</p>
+      <a href="/algorithms/2018/02/21/Leetcode_7_Reverse_Integer.html">
+        [Algorithms] 7. Reverse Integer
+      </a>
+  </div>
+  
+</div>
+
+    </div>
+    
+<footer class="site-footer">
+    <p class="text"><a href="https://github.com/lovesignal">Signal</a>
+</p>
+            <div class="footer-icons">
+                <ul>
+                <!-- Social icons from Font Awesome, if enabled -->
+                
+<li>
+	<a href="http://localhost:4000/feed.xml" title="Follow RSS feed">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+<li>
+	<a href="mailto:hmtb.signal@gmail.com" title="Email">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+	<a href="https://github.com/lovesignal" title="Follow on GitHub">
+		<span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+</footer>
+
+
+
+
+  </body>
+</html>
