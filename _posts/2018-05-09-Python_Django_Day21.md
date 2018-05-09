@@ -34,7 +34,7 @@ tags: [django, python]
 
 ### Url 추가하기
 
-```Python
+```python
 # urls.py 파일 수정
 from django.contrib import admin
 from django.urls import path, include
