@@ -24,7 +24,7 @@ tags: [django, python]
 
 ### urls.py
 
-<img src="./img/urlpatterns.png" width="80%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/django/urlpatterns.png" width="80%">
 
 모든 서버 url로 접속하는 요청들은 항상 urlpatterns을 먼저 인식한 후 일치하는 경로로 이동하게 된다.
 
