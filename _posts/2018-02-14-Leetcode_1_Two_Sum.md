@@ -4,7 +4,7 @@ layout : post
 title: "[Algorithms] 1. Two Sum"
 excerpt: "LeetCode #1, Easy"
 comments: true
-tags: [leetcode, algorithm]
+tags: [leetcode, algorithms]
 use_math: true
 ---
 
@@ -25,7 +25,7 @@ https://leetcode.com/problems/two-sum/description/
 Given nums = [2, 7, 11, 15], target = 9,
 Because nums[0] + nums[1] = 2 + 7 = 9,
 return [0, 1].
-```  
+```
 <br><br>  
 
 ## Approach
