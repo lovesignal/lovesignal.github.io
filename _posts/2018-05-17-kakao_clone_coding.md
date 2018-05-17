@@ -9,7 +9,9 @@ tags: [clone coding, nomadcoders, frontend, html, css]
 comments: true
 ---
 
+Nomadecoders의 카카오 클론 코딩 강의를 정리한 내용입니다.
 
+<br>
 
 # 1. 파일과 폴더 생성
 
@@ -28,7 +30,7 @@ comments: true
 
 6개의 html 파일과 2개의 폴더를 아래와 같이 만든다.
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/structures.png" width="200">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/structures.png">
 
 
 
@@ -38,9 +40,9 @@ comments: true
 
 헤더는 바로 맨 위에 프로필명 있는 구획을 의미한다. 
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/header.png" width="50%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/header.png">
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/header2.png" width="50%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/header2.png">
 
 <br><br>
 
@@ -151,7 +153,7 @@ https://fontawesome.com/get-started 참고해서 링크를 문서에 붙여넣�
 
 ### Bottom Header
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/bottomHeader.png" width="50%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/bottomHeader.png">
 
 화면을 살펴보면 중앙에 큰 텍스트가 있고, 왼쪽, 오른쪽에 아이콘이 있다.
 
@@ -230,7 +232,7 @@ column3 : setting
 
 * **결과**
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/index_header.png" width="30%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/index_header.png">
 
 <br>
 
@@ -298,7 +300,7 @@ Manage -> Edit
 
 - **결과**
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/chats_1.png" width="25%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/chats_1.png">
 
 <br>
 
@@ -306,7 +308,7 @@ Manage -> Edit
 
 ## Find.html
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/find.png" width="50%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/find.png">
 
 
 
@@ -356,7 +358,7 @@ Manage -> Edit
 
 * **결과**
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/find_header.png" width="25%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/find_header.png">
 
 <br>
 
@@ -364,7 +366,7 @@ Manage -> Edit
 
 ## more.html
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/more.png" width="50%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/more.png">
 
 ```html
 <!DOCTYPE html>
@@ -409,7 +411,7 @@ Manage -> Edit
 
 * **결과**
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/more_header.png" width="25%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/more_header.png">
 
 <br>
 
@@ -417,7 +419,7 @@ Manage -> Edit
 
 ## Chat.html
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/header.png" width="50%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/header.png">
 
 ```html
 <!DOCTYPE html>
@@ -466,7 +468,7 @@ Manage -> Edit
 
 <br>
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/chat_header.png" width="25%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/chat_header.png">
 
 <br>
 
@@ -474,7 +476,7 @@ Manage -> Edit
 
 ## profile.html
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/profile.png" width="50%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/profile.png">
 
 ```html
 <!DOCTYPE html>
@@ -519,7 +521,7 @@ Manage -> Edit
 
 <br>
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/profile_header.png" width="25%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/profile_header.png">
 
 <br>
 
@@ -604,7 +606,7 @@ chats, find, more의 각각 html 파일의 활성화 되는 탭의 코드를 위
 
 * 결과 : index.html
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/index_nav.png" width="50%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/index_nav.png">
 
 <br>
 
@@ -614,7 +616,7 @@ chats, find, more의 각각 html 파일의 활성화 되는 탭의 코드를 위
 
 # 4. 친구리스트 목록 만들기
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/friends_list.png" width="50%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/friends_list.png">
 
 <br>
 
@@ -828,7 +830,7 @@ span 태그로 이름을 입력한다. 클래스명은 friends__section-name으�
 
 * **결과**
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/index_4.png" width="40%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/index_4.png">
 
 <br>
 
@@ -836,7 +838,7 @@ span 태그로 이름을 입력한다. 클래스명은 friends__section-name으�
 
 # 5. chats.html
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/chats.png" width="40%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/chats.png">
 
 상단에 검색창이 있고, 두개의 줄이 있다. 각 줄마다 두개의 컬럼이 있다. 첫번째 컬럼에는 1개의 div, 1개의 이미지가 있다. 
 
@@ -891,7 +893,7 @@ chats.html에서 header 다음에 클래스명이 chats인 main을 생성한다.
 
 * 결과
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/chats_main.png" width="50%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/chats_main.png">
 
 <br>
 
