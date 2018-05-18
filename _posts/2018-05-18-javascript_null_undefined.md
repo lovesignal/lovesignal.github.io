@@ -13,7 +13,9 @@ comments: true
 
 ECMAScript 내용에 따르면 아래와 같다.
 
-[ECMAScript]: https://www.ecma-international.org/ecma-262/7.0/#sec-undefined-value	"ECMAScript"
+ECMAScript : <https://www.ecma-international.org/ecma-262/7.0/#sec-undefined-value>
+
+
 
 >  4.3.10   undefined value
 >
@@ -36,6 +38,8 @@ ECMAScript 내용에 따르면 아래와 같다.
 > 4.3.13   Null type
 >
 > type whose sole value is the null value
+
+<br>
 
 <br>
 
@@ -90,5 +94,5 @@ console.log(a);
 
 아래 링크 글을 참고하면 이해에 도움이 된다.
 
-[A brief history of Null and Undefined in JavaScript]: https://medium.com/@stephenthecurt/a-brief-history-of-null-and-undefined-in-javascript-c283caab662e	"A brief history of Null and Undefined in JavaScript"
+A brief history of Null and Undefined in JavaScript: <https://medium.com/@stephenthecurt/a-brief-history-of-null-and-undefined-in-javascript-c283caab662e>
 
