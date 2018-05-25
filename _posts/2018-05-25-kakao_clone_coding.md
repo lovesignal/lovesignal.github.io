@@ -356,7 +356,7 @@ Manage -> Edit
 
 * **결과**
 
-<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/find_header.png" width="25%">
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/programming/kakao-clone/find_header.png">
 
 <br>
 
