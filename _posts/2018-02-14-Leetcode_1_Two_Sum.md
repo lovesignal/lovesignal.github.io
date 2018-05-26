@@ -4,7 +4,7 @@ layout : post
 title: "[Algorithms] 1. Two Sum"
 excerpt: "LeetCode #1, Easy"
 comments: true
-tags: [leetcode, algorithms]
+tags: [algorithms]
 use_math: true
 ---
 
