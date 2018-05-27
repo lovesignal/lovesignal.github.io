@@ -14,7 +14,7 @@ use_math: true
 
 3으로 나누어떨어지는 수일 때는 fizz, 5로 나누어떨어지는 수일 때는  buzz, 3과 5 둘 다 나누어떨어질 때는 fizzbuzz로 숫자를 대체한다.
 
-
+<br><br>
 
 ## Modulus Operator
 
@@ -25,7 +25,7 @@ console.log(100%30);    // 10
 console.log(7%3)        // 1
 ```
 
-
+<br><br>
 
 ## Algorithm 
 
@@ -35,7 +35,7 @@ console.log(7%3)        // 1
 function fizzbuzz(num){}
 ```
 
-
+<br>
 
 예를들어, 20이 주어지면 결과가 1부터 20까지 출력되고, 위 조건의 숫자만 fizz, buzz, fizzbuzz로 대체 된다. 그러므로 1부터 20까지 출력될 수 있는 for문을 작성한다.
 
@@ -47,7 +47,7 @@ function fizzbuzz(num){
 }
 ```
 
-
+<br>
 
 num이나 i가 3으로 나누어 떨어지면 숫자 대신에 fizz, 5로 나누어 떨어지면 buzz, 3과 5 둘다 나누어 떨어지는 수이면 fizzbuzz가 출력되어야 한다. 앞에서 정리한 modulus operator를 사용하여 조건문을 만들 수 있다.
 
@@ -62,7 +62,7 @@ function fizzbuzz(num){
 }
 ```
 
-
+<br>
 
 위 조건문은 한가지 문제점이 있는데 3이나 5로 나누어 떨어지는 조건에 먼저 부합하게 되면 3과 5 둘다 나누어 떨어지는 수는 buzzfizz로 출력될 수 없게 된다. 그러므로 이를 해결하기 위해 3과 5 둘다 나누어지는 조건이 맨 첫번째 if 문으로 위치해야 한다.
 
