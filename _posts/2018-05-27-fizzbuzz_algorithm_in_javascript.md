@@ -10,9 +10,7 @@ use_math: true
 
 
 
-# 1. fizzbuzz 
-
-## 문제
+# 문제
 
 3으로 나누어떨어지는 수일 때는 fizz, 5로 나누어떨어지는 수일 때는  buzz, 3과 5 둘 다 나누어떨어질 때는 fizzbuzz로 숫자를 대체한다.
 
@@ -20,14 +18,16 @@ use_math: true
 
 ## Modulus Operator
 
+나누어서 나머지를 출력해주는 연산자로 '%'를 사용할 수 있다.
+
 ```javascript
-console.log(100%30);
-console.log(7%3)
+console.log(100%30);    // 10
+console.log(7%3)        // 1
 ```
 
 
 
-## Algorithm
+## Algorithm 
 
 먼저 문제를 해결할 function을 만든다.
 
