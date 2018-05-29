@@ -13,7 +13,7 @@ comments: true
 
 ### Mozilla 정규표현식 자료
 
-https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/%EC%A0%95%EA%B7%9C%EC%8B%9D
+<a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/%EC%A0%95%EA%B7%9C%EC%8B%9D"> Mozilla  : https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/%EC%A0%95%EA%B7%9C%EC%8B%9D </a>
 
 
 
@@ -23,11 +23,11 @@ https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/%EC%A0%95%EA%B7%9C%EC
 
 반복해서 보는 것을 추천한다.
 
-https://www.slideshare.net/ibare/ss-39274621
+<a href="https://www.slideshare.net/ibare/ss-39274621"> Slide : https://www.slideshare.net/ibare/ss-39274621 </a>
 
 
 
 ### 정규표현식 연습 사이트
 
-https://regexr.com/
+ <a href="https://regexr.com">regular_expressions site : https://regexr.com</a>
 
