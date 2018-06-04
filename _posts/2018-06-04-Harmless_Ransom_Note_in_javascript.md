@@ -10,8 +10,6 @@ use_math: true
 
 
 
-# 2. Harmless Ransom Note
-
 ## 문제
 
 Harmless ransom note algorithm은 두개의 parameter를 갖는다.
