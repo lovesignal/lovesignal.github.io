@@ -1,6 +1,6 @@
 # SITE CONFIGURATION
 baseurl: ""
-url: "https://lovesignal.github.io"
+url: "https://lifeisgouda.github.io"
 title: Signal # site's title
 description: "A website with blog posts" # used by search engines
 
@@ -8,8 +8,8 @@ description: "A website with blog posts" # used by search engines
 # THEME-SPECIFIC CONFIGURATION
 theme_settings:
   # Meta
-  title: Signal # blog's title
-  avatar: assets/img/triangle.svg
+  title: Gouda # blog's title
+  avatar: assets/img/gouda-cheese.png
   favicon: assets/favicon.ico
   gravatar: # Email MD5 hash
 
@@ -18,18 +18,18 @@ theme_settings:
      <p>Try, fail, improve, continue to do so ..</p>
   header_text_feature_image: assets/img/pexels/triangular.jpeg
   footer_text: >
-   <a href="https://github.com/lovesignal">Signal</a>
+   <a href="https://github.com/lifeisgouda">Gouda</a>
 
   # Icons
   rss: true  # Make sure you created a feed.xml with feed.xml layout
-  email_address: hmtb.signal@gmail.com
+  email_address: lifeisgoudacheese@gmail.com
   behance:
   bitbucket:
   dribbble:
   facebook:
   flickr:
   gitlab:
-  github: "lovesignal"
+  github: "lifeisgouda"
   google_plus:
   instagram:
   keybase:
