@@ -9,7 +9,7 @@ tags: [translation, react navtive, library]
 comments: true
 ---
 
-**원글 [React Native Component Libraries You Should Know in 2018](https://blog.bitsrc.io/11-react-native-component-libraries-you-should-know-in-2018-71d2a8e3331211 )를 번역했습니다. 오역이 많습니다. 영문과 함께 편집 했으니 번역문은 참고만 하시기 바랍니다.**
+**원글 [React Native Component Libraries You Should Know in 2018](https://blog.bitsrc.io/11-react-native-component-libraries-you-should-know-in-2018-71d2a8e33312 )를 번역했습니다. 오역이 많습니다. 영문과 함께 편집 했으니 번역문은 참고만 하시기 바랍니다. 잘못 번역된 부분에 대해서 언제든 의견주세요. 환영합니다.** 
 
 <br>
 
@@ -211,7 +211,8 @@ Due to relatively low maintenance, use with caution.
 <br>
 
 [**xinthink/react-native-material-kit**
-*react-native-material-kit - Bringing Material Design to React Native*github.com](https://github.com/xinthink/react-native-material-kit)
+
+react-native-material-kit - Bringing Material Design to React Native*github.com](https://github.com/xinthink/react-native-material-kit)
 
 <br>
 
