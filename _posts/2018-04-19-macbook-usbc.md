@@ -15,11 +15,15 @@ categories: idle
 
 어떻게 할까 고민하다가 톱질을 시작! (아래 사진은 톱질이 완성된 상태)
 
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/etc/IMG_8211.JPG">
+
 <br>  
 
 길이를 재서 실톱으로 잘라낸 후 사포질로 마무리. 
 
-60방 짜리 거친 사포로 해야 잘 갈려나간다.
+**60방 짜리 거친 사포**로 해야 잘 갈려나간다.
+
+<img src="https://raw.githubusercontent.com/lovesignal/img/master/etc/IMG_8212.JPG">
 
  <br>
 
