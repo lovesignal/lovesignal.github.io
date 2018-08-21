@@ -1,6 +1,6 @@
 ---
 layout : post
-date: 2018-04-19
+date: 2018-08-21
 title: "[Algorithms] LeetCode 189. Rotate Array"
 excerpt: "LeetCode 189 문제 풀이"
 categories: algorithms
