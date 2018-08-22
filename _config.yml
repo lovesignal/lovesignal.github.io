@@ -7,8 +7,6 @@ reading_time:     true # if true, shows the estimated reading time for a post
 words_per_minute: 200
 logo:             images/logo.png # logo visible in the topbar
 excerpt_separator: <!--more-->
-# Your site's domain goes here (eg: //mmistakes.github.io, http://mademistakes.com, etc)
-# When testing locally leave blank or use http://localhost:4000
 
 url: https://lifeisgouda.github.io
 
@@ -40,7 +38,7 @@ owner:
   name:           Gouda
   site:           https://lifeisgouda.github.io
   avatar:         images/avatar.png
-  bio:            "Hi, there! I am a programmer who is studying Web Technology. I wanted to improve life with web technology, so I started to study FrontEnd. I majored in Statistics and Law, and I really love numbers and gouda cheese! Of course I love JavaScript as much as gouda. I am slowly but steadily mature, like gouda! I'm studying English and Japanese. Please point out the wrong part. Welcome anytime."
+  bio:            "Hi, there! I am a developer who is studying Web Technology and Statistics. I wanted to improve life with technology, so I started to study FrontEnd and BackEnd. I majored in Statistics and Law, and I really love numbers and gouda cheese! Of course I love JavaScript & R as much as gouda. I am slowly but steadily mature, like gouda! I'm studying English and Japanese. Please point out the wrong part. Welcome anytime."
   email:          janejeon@outlook.com
   # Twitter nick for use in Twitter cards and follow button.
   # twitter: id # if no twitter in this config, the twitter follow button will be removed
