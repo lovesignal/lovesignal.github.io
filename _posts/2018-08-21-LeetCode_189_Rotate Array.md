@@ -5,7 +5,7 @@ title: "[Algorithms] LeetCode 189. Rotate Array"
 excerpt: "LeetCode 189 문제 풀이"
 categories: algorithms
 comments: true
-tag : [algorithms, leetcode]
+tag : [algorithms]
 ---
 
 

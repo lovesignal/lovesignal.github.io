@@ -1,10 +1,10 @@
 ---
 date: 2018-08-19
 layout : post
-title: "[Algorithms] JavaScript Stack 구현"
+title: "[Data Structure] JavaScript Stack 구현"
 excerpt: "JavaScript Stack 구현하기"
 comments: true
-tags: [algorithms, stack, javascript]
+tags: [algorithms, javascript]
 use_math: true
 categories: algorithms
 ---
