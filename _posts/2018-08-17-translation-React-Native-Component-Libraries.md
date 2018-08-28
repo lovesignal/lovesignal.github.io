@@ -82,7 +82,7 @@ NativeBase를 사용하면, 네이티브 서드파티 라이브러리를 기본�
 
 At over 12k stars react-native-elements is a highly customizable cross-platform UI toolkit built entirely in Javascript. 
 
-12만개의 별을 받은 react-native-elements는 자바 스크립트로 제작 된 사용자 정의가 가능한 cross-platform UI toolkit입니다.
+1만2천개의 별을 받은 react-native-elements는 자바 스크립트로 제작 된 사용자 정의가 가능한 cross-platform UI toolkit입니다.
 
 <br>
 
@@ -111,7 +111,7 @@ Here’s [an example Expo app](https://react-native-training.github.io/react-nat
 
 At 3.5k stars Shoutem is a React Native UI Kit which consists of 3 parts: [UI components](https://github.com/shoutem/ui), [Themes](https://github.com/shoutem/theme) and component [Animation](https://github.com/shoutem/animation). 
 
-3만5천개의 별을 받은 Shoutem은 [UI 컴포넌트](https://github.com/shoutem/ui),  [테마](https://github.com/shoutem/theme), 컴포넌트 [애니메이션](https://github.com/shoutem/animation) 세 부분으로 구성된 React Native UI Kit입니다.
+3천5백개의 별을 받은 Shoutem은 [UI 컴포넌트](https://github.com/shoutem/ui),  [테마](https://github.com/shoutem/theme), 컴포넌트 [애니메이션](https://github.com/shoutem/animation) 세 부분으로 구성된 React Native UI Kit입니다.
 
 <br>
 
@@ -138,7 +138,7 @@ Each component also has a predefined style that is consistent with the rest, whi
 
 At 3k stars this library provides a customizable and reusable react-native component kit based on the concept of moving style definitions into a specific place making components reusable and styled in a single way. 
 
-3만개의 별을 받은 이 라이브러리는 스타일 정의를 특정 위치로 이동시켜 컴포넌트를 재사용 및 단일방식(single way(?))으로 스타일화하는 컨셉에 기반하여 사용자 정의 및 재사용이 가능한 react-native component kit를 제공합니다.
+3천개의 별을 받은 이 라이브러리는 스타일 정의를 특정 위치로 이동시켜 컴포넌트를 재사용 및 단일방식(single way(?))으로 스타일화하는 컨셉에 기반하여 사용자 정의 및 재사용이 가능한 react-native component kit를 제공합니다.
 
 <br>
 
@@ -167,7 +167,7 @@ Here’s a nice [Expo application](https://expo.io/@akveo/ui-kitten-explorer-app
 
 A 2k stars library with a set of highly customizable UI components implementing Google’s material design. 
 
-2만개의 별을 받은 React Native Material UI는 라이브러리를 사용하여 Google’s material design을 구현하는 맞춤 설정할 수있는 UI 컴포넌트 세트를 제공합니다.
+2천개의 별을 받은 React Native Material UI는 라이브러리를 사용하여 Google’s material design을 구현하는 맞춤 설정할 수있는 UI 컴포넌트 세트를 제공합니다.
 
 <br>
 
@@ -200,7 +200,7 @@ Here’s [a list](https://github.com/xotahal/react-native-material-ui/blob/maste
 
 Although last NPM publish was on Dec 2017, this 4k-stars library is still worth a mention with a basic yet useful set of UI components and themes implementing Google’s MD. Why? because it’s simple, useful and low on surrounding “noise”. 
 
-마지막 NPM이 2017년 12월에 발행되었지만, 4만개의 별을 받은 이 라이브러리는 Google의 MD를 구현하는 기본적이지만 유용한 UI 컴포넌트 및 테마로 여전히 가치가 있습니다. 왜냐, 간단하고 유용하며 주변의 "노이즈"가 적습니다.
+마지막 NPM이 2017년 12월에 발행되었지만, 4천개의 별을 받은 이 라이브러리는 Google의 MD를 구현하는 기본적이지만 유용한 UI 컴포넌트 및 테마로 여전히 가치가 있습니다. 왜냐, 간단하고 유용하며 주변의 "노이즈"가 적습니다.
 
 <br>
 
@@ -226,7 +226,7 @@ react-native-material-kit - Bringing Material Design to React Native*github.com]
 
 At 1.5k stars Nachos UI is a React Native component library with over 30 customizable components which also work on the web thanks to [react-native-web](https://github.com/necolas/react-native-web%5C). 
 
-1만5천개의 별을 받은 Nachos UI는 30개 이상의 사용자 정의 가능한 컴포넌트가 있는 React Native 컴포넌트 라이브러리로서 [react-native-web](https://github.com/necolas/react-native-web%5C) 덕분에 웹에서 작동합니다.
+1천5백개의 별을 받은 Nachos UI는 30개 이상의 사용자 정의 가능한 컴포넌트가 있는 React Native 컴포넌트 라이브러리로서 [react-native-web](https://github.com/necolas/react-native-web%5C) 덕분에 웹에서 작동합니다.
 
 <br>
 
@@ -284,7 +284,7 @@ Take a look.
 
 At nearly 1.5K stars React Native Paper is a cross-platform UI component library which follows the material design guide lines, with [global theming support](https://callstack.github.io/react-native-paper/theming.html) and an optional babel-plugin to reduce bundle-size. 
 
-1만5천개의 별을 받은 React Native Paper는 bundle-size를 줄이기위한 선택적인 babel-plugin과 [글로벌 테마 지원](https://callstack.github.io/react-native-paper/theming.html) material design 가이드 라인을 따르는 크로스 플랫폼 UI 컴포넌트 라이브러리입니다. 
+1천5백개의 별을 받은 React Native Paper는 bundle-size를 줄이기위한 선택적인 babel-plugin과 [글로벌 테마 지원](https://callstack.github.io/react-native-paper/theming.html) material design 가이드 라인을 따르는 크로스 플랫폼 UI 컴포넌트 라이브러리입니다. 
 
 <br>
 
@@ -309,7 +309,7 @@ Here’s an [Expo example app](https://expo.io/@satya164/react-native-paper-exam
 
 At nearly 10k stars this library is, well, a set of customizable icons for React native with support for NavBar/TabBar/ToolbarAndroid, image source and full styling. 
 
-10만개에 가까운 별을 받은 이 라이브러리는 NavBar / TabBar / ToolbarAndroid, 이미지 소스 및 전체 스타일링을 지원하는 React Native용 맞춤형 아이콘 세트입니다.
+1만개에 가까운 별을 받은 이 라이브러리는 NavBar / TabBar / ToolbarAndroid, 이미지 소스 및 전체 스타일링을 지원하는 React Native용 맞춤형 아이콘 세트입니다.
 
 <br>
 
@@ -340,7 +340,7 @@ The library provides pre-made bundled icon sets out of the box, and here are [fu
 
 At 1.3k stars Teaset is a UI library for react native with 20+ pure JS(ES6) components, focusing on content display and action control. 
 
-1만3천개의 별을 받은 Teaset은 20개 이상의 순수JS(ES6) 컴포넌트와 반응하는 UI 라이브러리입니다. 콘텐츠 표시 및 동작 제어에 중점을 둡니다.
+1천3백개의 별을 받은 Teaset은 20개 이상의 순수JS(ES6) 컴포넌트와 반응하는 UI 라이브러리입니다. 콘텐츠 표시 및 동작 제어에 중점을 둡니다.
 
 <br>
 
