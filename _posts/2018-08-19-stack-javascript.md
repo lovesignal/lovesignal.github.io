@@ -1,6 +1,6 @@
 ---
 date: 2018-08-19
-layout : post
+key:20180819
 title: "[Data Structure] JavaScript Stack 구현"
 excerpt: "JavaScript Stack 구현하기"
 comments: true
