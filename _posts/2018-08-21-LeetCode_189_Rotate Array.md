@@ -1,11 +1,10 @@
 ---
-layout : post
-date: 2018-08-21
+key: 20180821
 title: "[Algorithms] LeetCode 189. Rotate Array"
 excerpt: "LeetCode 189 문제 풀이"
 categories: algorithms
 comments: true
-tag : [algorithms]
+tag : [algorithms, leetcode]
 ---
 
 
