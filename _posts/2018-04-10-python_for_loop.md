@@ -1,6 +1,5 @@
 ---
-layout : post
-date: 2018-04-10
+key: 20180410
 title: "[python] 리스트 변수를 반복문 돌리기 예시"
 excerpt: "python에서 리스트 변수에 반복문을 사용하는 방법에 대한 예시"
 categories: programming

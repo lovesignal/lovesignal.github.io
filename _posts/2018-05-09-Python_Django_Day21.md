@@ -1,9 +1,7 @@
 ---
-layout: post
 title: Python & Django Day21 Django view
 tags: [django, python]
-date: 2018-05-09
-tags: [django, python]
+key: 20180509
 categories: programming
 comments: true
 ---

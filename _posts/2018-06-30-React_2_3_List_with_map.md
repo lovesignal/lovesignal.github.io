@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-06-30
+key: 20180630
 title: "[React] Movie app clone coding : List with .map"
 excerpt: "movie app 만들기 - map을 이용하여 새로운 array 생성하기"
 categories: programming
 comments: true
 tags: [clonecoding, react, javascript, jsx]
-comments: true
 ---
 
 

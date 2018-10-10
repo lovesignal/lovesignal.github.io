@@ -1,6 +1,5 @@
 ---
-layout : post
-date: 2018-03-01
+key: 20180301
 title: "[Hadoop] Hadoop 완전분산모드 설치"
 excerpt: "VirtualBox를 이용하여 Hadoop을 완전분산모드로 설치하는 방법 정리"
 categories: programming

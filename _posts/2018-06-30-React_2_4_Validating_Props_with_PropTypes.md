@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-06-30
+key: 20180630
 title: "[React] Movie app clone coding : Validating Props with PropTypes"
 excerpt: "movie app 만들기 - PropTypes 이용하여 받아오는 정보 체크하기"
 categories: programming
 comments: true
 tags: [clonecoding, react, javascript, jsx]
-comments: true
 ---
 
 

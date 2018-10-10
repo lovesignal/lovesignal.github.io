@@ -1,6 +1,5 @@
 ---
-layout: post
-date: 2018-04-20
+key: 20180420
 title: Python & Django Day8 lambda, map, filter, 데코레이터
 tags: [django, python]
 categories: programming

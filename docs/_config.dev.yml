@@ -205,7 +205,7 @@ defaults:
       path: ""
       type: articles
     values:
-      show_date: false
+      show_key: false
   - scope:
       path: ""
       type: languages

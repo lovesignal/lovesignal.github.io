@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-05-18
+key: 20180518
 title: "[Javascript] null과 undefined"
 excerpt: "Javascript의 null과 undefined 비교 정리"
 categories: programming
 comments: true
 tags: [javascript, programming]
-comments: true
 ---
 
 ## null, undefined

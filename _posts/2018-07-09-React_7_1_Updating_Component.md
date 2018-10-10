@@ -1,10 +1,8 @@
 ---
-layout: post
-date: 2018-07-09
+key: 20180709
 title: "[React] Movie app clone coding : Updating Component"
 excerpt: "movie app 만들기 - Updating Component"
 categories: programming
-comments: true
 tags: [clonecoding, react, javascript, jsx]
 comments: true
 ---

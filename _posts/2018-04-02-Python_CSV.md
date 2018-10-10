@@ -1,6 +1,5 @@
 ---
-layout : post
-date: 2018-04-02
+key: 20180402
 title: "[Programming] Python에서 CSV 파일을 읽어들이는 여러가지 방법"
 excerpt: "Python에서 CSV 파일을 읽어들이는 여러가지 방법을 간결하게 정리"
 categories: programming

@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-06-29
+key: 20180629
 title: "[React] Movie app clone coding : Dataflow with Props"
 excerpt: "movie app 만들기 - props를 통해서 정보를 전달하기"
 categories: programming
 comments: true
 tags: [clonecoding, react, javascript, jsx]
-comments: true
 ---
 
 

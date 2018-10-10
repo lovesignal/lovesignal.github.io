@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-05-28
+key: 20180528
 title: "[programming] 정규표현식 학습에 도움되는 사이트 및 자료"
 excerpt: "정규표현식 학습 자료"
 categories: programming
 comments: true
 tags: [programming, data handling]
-comments: true
 ---
 
 

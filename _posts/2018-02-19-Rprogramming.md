@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-02-19
+key: 20180219
 title: "[R] R의 Data Structure"
 excerpt: "R의 기본적인 데이터 구조 설명"
 categories: Statistics
 comments: true
 tags: [R, data structure]
-comments: true
 ---
 
 # [R] R의 Data structure

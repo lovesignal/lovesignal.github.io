@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-07-02
+key: 20180702
 title: "[React] Movie app clone coding : Component State"
 excerpt: "movie app 만들기 - Component State의 이해"
 categories: programming
 comments: true
 tags: [clonecoding, react, javascript, jsx]
-comments: true
 ---
 
 

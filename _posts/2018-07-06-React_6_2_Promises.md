@@ -1,10 +1,8 @@
 ---
-layout: post
-date: 2018-07-06
+key: 20180706
 title: "[React] Movie app clone coding : Promises"
 excerpt: "movie app 만들기 - Promise 기능 및 적용"
 categories: programming
-comments: true
 tags: [clonecoding, react, javascript, jsx]
 comments: true
 ---

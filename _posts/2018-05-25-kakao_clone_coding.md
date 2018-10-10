@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-05-25
+key: 20180525
 title: "[Clone Coding] KAKAO Talk on HTML"
 excerpt: "nomadcoders 강의를 듣고 정리한 카카오톡 클론 코딩 - HTML"
 categories: programming
 comments: true
 tags: [clonecoding, html]
-comments: true
 ---
 
 

@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-07-09
+key: 20180709
 title: "[React] Movie app clone coding : Building for production"
 excerpt: "movie app 만들기 - Building for production"
 categories: programming
 comments: true
 tags: [clonecoding, react, javascript, jsx]
-comments: true
 ---
 
 

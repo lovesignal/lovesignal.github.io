@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-07-03
+key: 20180703
 title: "[React] Movie app clone coding : Loading States"
 excerpt: "movie app 만들기 - API call을 timeout 기능으로 유사하게 구현"
 categories: programming
 comments: true
 tags: [clonecoding, react, javascript, jsx]
-comments: true
 ---
 
 

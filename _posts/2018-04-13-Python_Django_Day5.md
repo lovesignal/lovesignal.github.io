@@ -1,6 +1,5 @@
 ---
-layout: post
-date: 2018-04-13
+key: 20180413
 title: Python & Django Day5
 tags: [django, python]
 categories: programming

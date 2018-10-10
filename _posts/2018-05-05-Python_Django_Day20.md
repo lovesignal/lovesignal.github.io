@@ -1,7 +1,6 @@
 ---
-layout: post
 title: Python & Django Day20 Django 프로젝트 파일 구조, MTV
-date: 2018-05-05
+key: 20180505
 tags: [django, python]
 categories: programming
 comments: true

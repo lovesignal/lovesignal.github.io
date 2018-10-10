@@ -1,11 +1,8 @@
 ---
-date: 2018-08-07
-layout : post
+key: 20180807
 title: "[Algorithms] LeetCode 812. Largest Triangle Area"
 excerpt: "LeetCode 812. Largest Triangle Area"
-comments: true
 tags: [algorithms]
-use_math: true
 categories: algorithms
 ---
 

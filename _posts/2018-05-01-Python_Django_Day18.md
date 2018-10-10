@@ -1,6 +1,5 @@
 ---
-layout: post
-date: 2018-05-01
+key: 20180501
 title: Python & Django Day18 Python 가상환경 세팅 & Django 설치
 tags: [django, python]
 categories: programming

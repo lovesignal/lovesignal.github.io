@@ -1,10 +1,8 @@
 ---
-layout: post
-date: 2018-08-14
+key: 20180814
 title: "[React] 중요 내용 정리"
 excerpt: "React ClassNote"
 categories: programming
-comments: true
 tags: [clonecoding, react, javascript]
 comments: true
 ---

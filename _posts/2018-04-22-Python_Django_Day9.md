@@ -1,6 +1,5 @@
 ---
-layout: post
-date: 2018-04-22
+key: 20180422
 title: Python & Django Day9 기초알고리즘(정렬)
 tags: [django, python]
 categories: programming

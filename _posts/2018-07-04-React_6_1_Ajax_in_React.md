@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-07-04
+key: 20180704
 title: "[React] Movie app clone coding : Ajax in React"
 excerpt: "movie app 만들기 - Fetch 이용해서 API 불러오기"
 categories: programming
 comments: true
 tags: [clonecoding, react, javascript, jsx]
-comments: true
 ---
 
 

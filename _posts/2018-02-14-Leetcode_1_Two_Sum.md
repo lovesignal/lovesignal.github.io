@@ -1,11 +1,9 @@
 ---
-date: 2018-02-14
-layout : post
+key: 20180214
 title: "[Algorithms] 1. Two Sum"
 excerpt: "LeetCode #1, Easy"
 comments: true
 tags: [algorithms]
-use_math: true
 categories: algorithms
 ---
 

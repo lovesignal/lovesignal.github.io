@@ -1,12 +1,10 @@
 ---
-layout: post
-date: 2018-07-04
+key: 20180704
 title: "[React] Movie app clone coding : Smart vs Dumb Components"
 excerpt: "movie app 만들기 - Smart vs Dumb Components"
 categories: programming
 comments: true
 tags: [clonecoding, react, javascript, jsx]
-comments: true
 ---
 
 

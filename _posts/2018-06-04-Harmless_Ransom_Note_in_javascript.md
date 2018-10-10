@@ -1,11 +1,9 @@
 ---
-date: 2018-06-04
-layout : post
+key: 20180604
 title: "[Algorithms] Harmless Ransom Note in Javascript"
 excerpt: "Harmless Ransom Note를 이해하고 javascript로 풀기. hash table을 이용하여 객체를 다루고 빠른 프로그램 구현하는 것이 목표."
 comments: true
 tags: [algorithms]
-use_math: true
 categories: algorithms
 ---
 

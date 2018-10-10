@@ -1,7 +1,6 @@
 ---
-layout: post
 title: Python & Django Day19 프레임워크
-date: 2018-05-03
+key: 20180503
 tags: [django, python]
 categories: programming
 comments: true

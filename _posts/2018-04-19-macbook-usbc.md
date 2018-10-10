@@ -1,11 +1,9 @@
 ---
-date: 2018-04-19
-layout : post
+key: 20180419
 title: "Macbook Pro 케이스와 USB C Hub"
 excerpt: "맥북에 새 케이스와 USB-C 허브 맞춰주기"
 comments: true
 tags: [idle, daily]
-use_math: true
 categories: idle
 ---
 

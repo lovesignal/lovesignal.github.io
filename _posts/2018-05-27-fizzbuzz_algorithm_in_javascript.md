@@ -1,11 +1,9 @@
 ---
-date: 2018-05-27
-layout : post
+key: 20180527
 title: "[Algorithms] FizzBuzz in Javascript"
 excerpt: "알고리즘 문제 fizzbuzz를 이해하고 javascript로 풀기"
 comments: true
 tags: [algorithms]
-use_math: true
 categories: algorithms
 ---
 

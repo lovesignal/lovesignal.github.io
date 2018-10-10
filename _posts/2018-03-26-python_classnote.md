@@ -1,6 +1,5 @@
 ---
-layout : post
-date: 2018-03-26
+key: 20180326
 title: "[Python] Python Class note"
 excerpt: "Inflearn에 있는 <프로그래밍, 데이터 과학을 위한 파이썬 입문> 강의를 듣고 정리한 강의노트 일부(계속 업로드 중...)"
 categories: programming

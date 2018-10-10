@@ -1,11 +1,8 @@
 ---
-date: 2018-08-14
-layout : post
+key: 20180814
 title: "[Algorithms] Two Fer"
 excerpt: "exercise algorithms quiz Two Fer"
-comments: true
 tags: [algorithms]
-use_math: true
 categories: algorithms
 ---
 
