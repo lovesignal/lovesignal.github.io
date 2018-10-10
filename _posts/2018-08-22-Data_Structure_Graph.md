@@ -2,10 +2,10 @@
 key: 20180822
 title: "[Data Structure] Graph"
 excerpt: "그래프 자료구조 이해 및 구현"
-tags: algorithms, data structure
+comments: true
+tags: [algorithms, data structure]
+categories: algorithms
 ---
-
-
 
 ## 정의
 
