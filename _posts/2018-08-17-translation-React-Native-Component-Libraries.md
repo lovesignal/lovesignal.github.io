@@ -1,12 +1,9 @@
 ---
-layout: post
-date: 2018-08-17
+key: 20180817
 title: "[번역] 2018년에 당신이 알아야할 리액트 네이티브 컴포넌트 라이브러리 11가지"
 excerpt: "11 React Native Component Libraries You Should Know in 2018 번역"
 categories: translation
-comments: true
 tags: [translation, react navtive, library]
-comments: true
 ---
 
 **원글 [React Native Component Libraries You Should Know in 2018](https://blog.bitsrc.io/11-react-native-component-libraries-you-should-know-in-2018-71d2a8e33312 )를 번역했습니다. 오역이 많습니다. 영문과 함께 편집 했으니 번역문은 참고만 하시기 바랍니다. 잘못 번역된 부분에 대해서 언제든 의견주세요. 환영합니다.** 
