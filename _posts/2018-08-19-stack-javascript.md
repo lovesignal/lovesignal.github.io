@@ -4,7 +4,6 @@ title: "[Data Structure] JavaScript Stack 구현"
 excerpt: "JavaScript Stack 구현하기"
 comments: true
 tags: [algorithms, javascript]
-use_math: true
 categories: algorithms
 ---
 
