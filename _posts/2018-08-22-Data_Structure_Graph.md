@@ -1,13 +1,8 @@
 ---
-date: 2018-08-22
 key: 20180822
-layout : post
 title: "[Data Structure] Graph"
 excerpt: "그래프 자료구조 이해 및 구현"
-comments: true
-tags: [algorithms, data structure]
-use_math: true
-categories: algorithms
+tags: algorithms, data structure
 ---
 
 
