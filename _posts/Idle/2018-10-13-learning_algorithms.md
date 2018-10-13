@@ -1,6 +1,6 @@
 ---
 key: 20181013
-title: "알고리즘을 공부하면서 느낀 몇가지"
+title: "[idle] 알고리즘을 공부하면서 느낀 몇가지"
 excerpt: "알고리즘 학습 단상"
 comments: true
 tags: [idle, daily]

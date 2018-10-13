@@ -1,13 +1,10 @@
 ---
 key: 20181010
-title: [React] 새 페이지 렌더링 시 상단에서 시작하기
+title: "[React] 새 페이지 렌더링 시 상단에서 시작하기"
 excerpt: "리액트는 새 페이지를 렌더링한 후 스크롤을 맨 위로 올려주지 않는다. 그래서 별도로 컴포넌트를 만들어서 설정해주어야 한다."
 categories: programming
-comments: true
 tag : [react, programming, javascript]
 ---
-
-
 
 리액트는 새 페이지를 렌더링한 후 스크롤을 맨 위로 올려주지 않는다. 그래서 별도로 컴포넌트를 만들어서 설정해주어야 한다.
 
