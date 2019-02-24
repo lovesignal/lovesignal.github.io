@@ -42,3 +42,11 @@ mac mojave에서 gollum 설치 에러가 나는 바람에 아래 링크를 통�
 gollum 사용이 생각보다 불편해서 github 블로그 방식으로 대체.
 
 http://www.drassil.org/git-wiki/main_page
+
+https://idratherbewriting.com/documentation-theme-jekyll/
+
+
+
+* wiki 
+
+  https://lifeisgouda.github.io/goudawiki/
