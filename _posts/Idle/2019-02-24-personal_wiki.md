@@ -15,14 +15,30 @@ categories: idle
 
 쉬운 내용이어도 꾸준히 추가해서 나만의 위키를 만들 예정.
 
-* 참고 글
 
-  https://nolboo.kim/blog/2013/12/17/markdown-wiki-bitbucket-gollum/
 
-  https://github.com/gollum/gollum/wiki
+mac mojave에서 gollum 설치 에러가 나는 바람에 아래 링크를 통해서 해결하였다.
 
-  https://blog.outsider.ne.kr/579
+* mojave에서 gollum 설치 에러 해결 :
+
+  ```shell
+  $ gem install charlock_holmes -- --with-cxxflags=-std=c++11
+  ```
+
+  https://www.bountysource.com/issues/48897255-unable-to-install-0-7-5-on-macos-sierra-10-12-6
 
   
 
-* 내 위키 : https://github.com/lifeisgouda/goudawiki/wiki
+* gollum 설치 참고 글
+
+  https://github.com/gollum/gollum/wiki
+
+  https://github.com/gollum/gollum/wiki/Installation
+
+  https://gorails.com/setup/osx/10.14-mojave
+
+---
+
+gollum 사용이 생각보다 불편해서 github 블로그 방식으로 대체.
+
+http://www.drassil.org/git-wiki/main_page
