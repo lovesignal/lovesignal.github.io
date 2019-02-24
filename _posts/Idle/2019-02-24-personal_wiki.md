@@ -15,7 +15,12 @@ categories: idle
 
 쉬운 내용이어도 꾸준히 추가해서 나만의 위키를 만들 예정.
 
+* 참고 글: 
+
 https://guides.github.com/features/wikis/
 
+https://github.com/TeamCrazyPerformance/tcpsite/wiki/Wiki-%EC%82%AC%EC%9A%A9%EB%B2%95
 
 
+
+* 내 위키 : https://github.com/lifeisgouda/goudawiki/wiki
