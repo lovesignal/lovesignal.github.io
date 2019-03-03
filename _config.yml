@@ -2,9 +2,9 @@
 ##############################
 text_skin: default # "default" (default), "dark", "forest", "ocean", "chocolate", "orange"
 highlight_theme: tomorrow-night # "default" (default), "tomorrow", "tomorrow-night", "tomorrow-night-eighties", "tomorrow-night-blue", "tomorrow-night-bright"
-url     : https://www.fourier.dev
+url     : # https://www.fourier.dev
 baseurl : # does not include hostname
-enforce_ssl: www.fourier.dev
+# enforce_ssl: www.fourier.dev
 title   : Gouda
 description: > # this means to ignore newlines until "Language & timezone"
   Try, fail, improve, continue to do so ..
@@ -21,7 +21,7 @@ timezone: KR
 author:
   type      : person
   name      : Gouda
-  url       : https://lifeisgouda.github.io/
+  url       : https://www.fourier.dev/
   avatar    : # path or url of avatar image
   bio       : Try, fail, improve, continue to do so ..
   email     :
