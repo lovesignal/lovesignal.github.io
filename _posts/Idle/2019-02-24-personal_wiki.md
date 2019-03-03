@@ -49,4 +49,4 @@ https://idratherbewriting.com/documentation-theme-jekyll/
 
 * wiki 
 
-  https://lifeisgouda.github.io/goudawiki/
+  https://lifeisgouda.github.io/wiki/
