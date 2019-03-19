@@ -4,7 +4,7 @@ title: "[python] Pandas를 이용한 데이터 전처리 1"
 excerpt: "pandas를 이용하여 특정 단어가 포함 되었는지 확인하는 방법"
 categories: programming
 comments: true
-tag : [programming, python]
+tag : [programming, python, pandas]
 ---
 
 
