@@ -12,7 +12,7 @@ tag : [python, programming, module]
 
 코드: https://github.com/lifeisgouda/my_python_modules/tree/master/json_key_remover
 
-JSON 데이터에서 특정 key ( 여기서는 coordinates ) 에서 값이  [0, 0]일 경우 해당 키를 삭제하는 모듈이다.
+JSON 데이터에서 특정 key ( 여기서는 `coordinates` ) 에서 값이  `[0, 0]` 일 경우 해당 키를 삭제하는 모듈이다.
 
 json의 뎁스가 워낙 깊고, 검사해야할 부분이 많아서 부득이하게 3중 for문이 사용되었다. 
 
