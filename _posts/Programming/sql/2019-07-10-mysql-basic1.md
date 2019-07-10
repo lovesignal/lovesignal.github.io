@@ -1,11 +1,13 @@
+---
 key: 20190224
 title: "[MySQL: BASIC] 맨앞/맨끝 특정 문자가 있는/없는 값만 추출하기"
 excerpt: "맨앞/맨끝 특정 문자가 있는/없는 값만 추출하기"
 categories: programming
 comments: true
 tag : [sql, mysql]
-
 ---
+
+
 
 ## SQL 쿼리 예시
 
