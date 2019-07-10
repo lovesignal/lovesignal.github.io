@@ -11,7 +11,7 @@ tag : [sql, mysql]
 
 ## SQL 쿼리 예시
 
-```mysql
+```sql
 -- 맨 끝에 특정 문자 오는 값만 추출
 SELECT DISTINCT CITY FROM STATION 
 WHERE RIGHT(CITY,1) IN ('a','i','e','o','u');
