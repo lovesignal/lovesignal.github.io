@@ -7,8 +7,6 @@ tags: [MySQL]
 categories: sql
 ---
 
-# Stored Procedure 알아보기 (in MySQL)
-
 ## 1. 사전에 알아야할 용어
 
 ### 1.1 PL/SQL
